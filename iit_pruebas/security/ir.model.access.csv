@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_libros_user,Acceso a libros,model_libros,libreria_group_user,1,1,1,1
+access_autor_user,Acceso a autores,model_autores,libreria_group_user,1,1,1,1
+access_libros_user_nm,Acceso a libros,model_libros,libreria_group_user_nm,1,0,0,0
+access_cagetoria_user,Acceso a categorias,model_categoria_libro,libreria_group_user,1,1,1,1

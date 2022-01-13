@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+
+<odoo>
+    <record id="categoria_modulo_academia" model="ir.module.category">
+        <field name="name">Academia</field>
+    </record>
+    <record id="academia_group_administrador" model="res.groups">
+        <field name="name">Administrador</field>
+        <field name="category_id" ref="categoria_modulo_academia"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+</odoo>

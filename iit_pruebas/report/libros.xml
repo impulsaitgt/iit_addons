@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="report_libros" model="ir.actions.report">
+        <field name="name">Detalles del libro</field>
+        <field name="model">libros</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">iit_pruebas.report_libro</field>
+        <field name="report_file">iit_pruebas.report_libro</field>
+        <field name="binding_model_id" ref="model_libros"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

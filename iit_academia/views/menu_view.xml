@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+
+<odoo>
+
+    <record id="estudiante_action" model="ir.actions.act_window">
+        <field name="name">Estudiantes</field>
+        <field name="res_model">aca.estudiante</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <record id="contratos_action" model="ir.actions.act_window">
+        <field name="name">Contratos</field>
+        <field name="res_model">aca.contrato</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <record id="torneos_action" model="ir.actions.act_window">
+        <field name="name">Torneos</field>
+        <field name="res_model">aca.torneo</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <record id="cargos_automaticos_action" model="ir.actions.act_window">
+        <field name="name">Cargos Automaticos</field>
+        <field name="res_model">aca.cargo.estudiante</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <record id="cargos_generados_action" model="ir.actions.act_window">
+        <field name="name">Cargos Generados</field>
+        <field name="res_model">aca.cargo.estudiante.lines</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+
+
+    <menuitem name="Academia" id="academia_menu"/>
+    <menuitem name="Estudiantes" id="estudiante_menu" parent="academia_menu" />
+    <menuitem name="Estudiantes" id="estudiante_opcion" parent="estudiante_menu" action="estudiante_action"/>
+    <menuitem name="Contratos" id="contratos_opcion" parent="estudiante_menu" action="contratos_action"/>
+    <menuitem name="Torneos" id="torneos_opcion" parent="estudiante_menu" action="torneos_action"/>
+
+    <menuitem name="Procesos" id="proceso_menu" parent="academia_menu" />
+    <menuitem name="Cargos automaticos" id="cargos_automaticos_opcion" parent="proceso_menu" action="cargos_automaticos_action"/>
+
+    <menuitem name="Informes" id="informe_menu" parent="academia_menu" />
+    <menuitem name="Cargos generados" id="cargos_generados_opcion" parent="informe_menu" action="cargos_generados_action"/>
+
+
+
+</odoo>

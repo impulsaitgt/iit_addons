@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+
+<odoo>
+
+    <!-- Vista formulario para juegos -->
+
+    <record id="juego_form_view" model="ir.ui.view">
+        <field name="name">juego.form.view</field>
+        <field name="model">tie.juego</field>
+        <field name="arch" type="xml">
+            <form string="Juego">
+                <sheet> <!-- Bootstrap 12 Columnas -->
+                    <group>
+                        <group>
+                            <h1>
+                                <field name="name" placeholder="Nombre del juego"/>
+                            </h1>
+                        </group>
+                    </group>
+                    <group> <!-- 6 Columnas -->
+                        <group>
+                            <field name="precio" placeholder="Precio"/>
+                        </group>
+                        <group>
+                            <field name="activo" placeholder="Esta activo"/>
+                       </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+        <!-- vista Arbol (Tree) estudiantes -->
+    <record id="juego_tree_view" model="ir.ui.view">
+        <field name="name">juego.tree.view</field>
+        <field name="model">tie.juego</field>
+        <field name="arch" type="xml">
+            <tree string="Juegos">
+                <field name="name"/>
+                <field name="precio"/>
+                <field name="activo"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+
+<!--
+<odoo>
+    <record id="view_order_from_ihnerit" model="ir.ui.view">
+        <field name="name">sale.order.inherited</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="payment_term_id" position="after">
+                <field name="factura_fel"/>
+            </field>
+        </field>
+    </record>
+</odoo>
+
+-->
+
+<odoo>
+    <record id="account_view_move_form_ihnerit" model="ir.ui.view">
+        <field name="name">account.view.inherited</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="factura_fel"/>
+            </field>
+        </field>
+    </record>
+</odoo>

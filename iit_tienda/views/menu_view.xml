@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+
+<odoo>
+
+    <record id="juego_action" model="ir.actions.act_window">
+        <field name="name">Juegos</field>
+        <field name="res_model">tie.juego</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+
+    <menuitem name="Tienda" id="tienda_menu"/>
+    <menuitem name="Juegos" id="juego_menu" parent="tienda_menu" />
+    <menuitem name="Juegos" id="juego_opcion" parent="juego_menu" action="juego_action"/>
+
+
+</odoo>

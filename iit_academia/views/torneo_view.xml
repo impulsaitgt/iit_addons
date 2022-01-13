@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+
+<odoo>
+
+    <!-- Vista formulario para torneos -->
+
+    <record id="torneo_form_view" model="ir.ui.view">
+        <field name="name">torneo.form.view</field>
+        <field name="model">aca.torneo</field>
+        <field name="arch" type="xml">
+            <form string="Torneo">
+                <sheet> <!-- Bootstrap 12 Columnas -->
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_cargos" icon="fa-pencil-square">
+                            Cargos
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <h1>
+                                <field name="name" placeholder="Nombre"/>
+                            </h1>
+                        </group>
+                    </group>
+                    <group> <!-- 6 Columnas -->
+                        <group>
+                            <field name="fecha_inicial" placeholder="Fecha Inicial"/>
+                            <field name="fecha_final" placeholder="Fecha Final"/>
+                            <field name="inscripcion" placeholder="Inscripcion"/>
+                        </group>
+                        <group>
+                            <field name="observaciones" placeholder="Observaciones"/>
+                            <field name="status" placeholder="Estatus"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Estudiantes relacionados" name="estudiantes_relacionados">
+                            <field name="torneos_lines" widget="section_and_note_one2many" mode="tree,kanban">
+                                <tree editable="botoom" string="Estudiantes">
+                                    <control>
+                                        <create name="agrega_estudiante" string="Agrega Estudiante"/>
+                                    </control>
+
+                                    <field name="estudiante_id" optional="show"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+        <!-- vista Arbol (Tree) contratos -->
+    <record id="torneo_tree_view" model="ir.ui.view">
+        <field name="name">torneo.tree.view</field>
+        <field name="model">aca.torneo</field>
+        <field name="arch" type="xml">
+            <tree string="Torneos">
+                <field name="name"/>
+                <field name="fecha_inicial"/>
+                <field name="fecha_final"/>
+                <field name="status" widget="badge" decoration-danger="status == '0'" decoration-success="status == '1'"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

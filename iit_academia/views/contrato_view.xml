@@ -1,0 +1,76 @@
+<?xml version="1.0" ?>
+
+<odoo>
+
+    <!-- Vista formulario para contratos -->
+
+    <record id="contrato_form_view" model="ir.ui.view">
+        <field name="name">contrato.form.view</field>
+        <field name="model">aca.contrato</field>
+        <field name="arch" type="xml">
+            <form string="Estudiante">
+                <sheet> <!-- Bootstrap 12 Columnas -->
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="action_view_cargos" icon="fa-pencil-square">
+                            Cargos
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <h1>
+                                <field name="name" placeholder="Contrato"/>
+                            </h1>
+                        </group>
+                    </group>
+                    <group> <!-- 6 Columnas -->
+                        <group>
+                            <field name="fecha_inicial" placeholder="Fecha Inicial"/>
+                            <field name="fecha_final" placeholder="Fecha Final"/>
+                            <field name="inscripcion" placeholder="Inscripcion"/>
+                            <field name="mensualidad" placeholder="Inscripcion"/>
+                        </group>
+                        <group>
+                            <field name="responsable_id" placeholder="Responsable"/>
+                            <field name="estudiante_id" placeholder="Estudiante"/>
+                            <field name="status" placeholder="Estatus"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Articulos relacionados" name="articulos_relacionados">
+                            <field name="contratos_lines" widget="section_and_note_one2many" mode="tree,kanban">
+                                <tree editable="botoom" string="Articulos">
+                                    <control>
+                                        <create name="agrega_articulo" string="Agrega Articulo"/>
+                                    </control>
+
+                                    <field name="producto_id" optional="show"/>
+                                    <field name="cantidad"/>
+                                    <field name="precio"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <field name="observaciones" placeholder="Observaciones" class="oe_inline" nolabel="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- vista Arbol (Tree) contratos -->
+    <record id="contrato_tree_view" model="ir.ui.view">
+        <field name="name">contrato.tree.view</field>
+        <field name="model">aca.contrato</field>
+        <field name="arch" type="xml">
+            <tree string="Contratos">
+                <field name="name"/>
+                <field name="fecha_inicial"/>
+                <field name="fecha_final"/>
+                <field name="responsable_id"/>
+                <field name="estudiante_id"/>
+                <field name="status" widget="badge" decoration-danger="status == '0'"
+                       decoration-success="status == '1'"/>
+            </tree>
+        </field>
+    </record>
+
+</odoo>

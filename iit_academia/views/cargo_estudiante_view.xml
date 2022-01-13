@@ -1,0 +1,123 @@
+<?xml version="1.0" ?>
+
+<odoo>
+
+    <!-- Vista formulario para libros -->
+
+    <record id="cargos_estudiantes_form_view" model="ir.ui.view">
+        <field name="name">cargo.estudiante.form.view</field>
+        <field name="model">aca.cargo.estudiante</field>
+        <field name="arch" type="xml">
+            <form string="libro">
+                <header>
+                    <field name="state" widget='statusbar' statusbar_visible="draft,published"/>
+                    <button name="action_genera_cargos" type="object" string="Generar Cargos" class="oe_highlight"
+                            confirm="Esto eliminara cargos no publicados nunca si ya estaban generados, esta seguro?"
+                            attrs="{'invisible': ['|',['state', '=', 'published'],['state', '=', 'cancelled']]}"/>
+                    <button name="action_confirma_cargos" type="object" string="Confirma Cargos" class="oe_highlight"
+                            attrs="{'invisible': ['|',['state', '=', 'published'],['state', '=', 'cancelled']]}"/>
+                    <button name="action_reestablece_borrador" type="object" string="Restablecer a borrador"
+                            attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                    <button name="action_cancela" type="object" string="Cancela"
+                            attrs="{'invisible': ['|',('state', '=', 'published'),('state', '=', 'cancelled')]}"/>
+                </header>
+                <sheet> <!-- Bootstrap 12 Columnas -->
+                    <group> <!-- 6 Columnas -->
+                        <group>
+                            <field name="name"/>
+                            <field name="fecha"/>
+                        </group>
+                        <group>
+                            <field name="monto"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Cargos generados" name="cargos_generados">
+                            <field name="cargo_estudiante_lines" widget="section_and_note_one2many" mode="tree,kanban">
+                                <tree editable="botoom" string="Cargos generados">
+                                    <field name="contrato_id" optional="show"/>
+                                    <field name="torneo_id" optional="show"/>
+                                    <field name="estudiante_id" optional="show"/>
+                                    <field name="responsable_id" optional="show"/>
+                                    <field name="cargo_id" optional="show"/>
+                                    <field name="fecha_cargo"/>
+                                    <field name="monto" optional="show"/>
+                                    <field name="tipo" optional="show"/>
+                                    <field name="state" widget="badge" decoration-info="state == 'Borrador'"
+                                           decoration-success="state == 'Publicado'"
+                                           decoration-muted="state == 'Cancelado'"/>
+                                    <field name="payment_state" widget="badge"
+                                           decoration-danger="payment_state == 'No pagadas'"
+                                           decoration-success="payment_state == 'Pagado' or payment_state == 'Revertido'"
+                                           decoration-warning="payment_state == 'Pagado Parcialmente'"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- vista Arbol (Tree)  -->
+    <record id="cargo_estudiante_tree_view" model="ir.ui.view">
+        <field name="name">cargo.estudiante.tree.view</field>
+        <field name="model">aca.cargo.estudiante</field>
+        <field name="arch" type="xml">
+            <tree string="Cargos Automaticos">
+                <field name="name"/>
+                <field name="fecha"/>
+                <field name="monto"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'"
+                       decoration-success="state == 'published'" decoration-muted="state == 'cancelled'"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <!-- vista Arbol (Tree)  -->
+    <record id="cargo_estudiante_lines_tree_view" model="ir.ui.view">
+        <field name="name">cargo.estudiante.line.tree.view</field>
+        <field name="model">aca.cargo.estudiante.lines</field>
+        <field name="arch" type="xml">
+            <tree string="Cargos Automaticos">
+                <field name="contrato_id" optional="show"/>
+                <field name="torneo_id" optional="show"/>
+                <field name="estudiante_id" optional="show"/>
+                <field name="responsable_id" optional="show"/>
+                <field name="cargo_id" optional="show"/>
+                <field name="fecha_cargo"/>
+                <field name="monto" optional="show"/>
+                <field name="tipo" optional="show"/>
+                <field name="state" widget="badge" decoration-info="state == 'Borrador'"
+                       decoration-success="state == 'Publicado'"
+                       decoration-muted="state == 'Cancelado'" optional="show"/>
+                <field name="payment_state" widget="badge"
+                       decoration-danger="payment_state == 'No pagadas'"
+                       decoration-success="payment_state == 'Pagado' or payment_state == 'Revertido'"
+                       decoration-warning="payment_state == 'Pagado Parcialmente'" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+
+        <!-- vista busqueda -->
+    <record id="cargo_estudiante_lines_serach_view" model="ir.ui.view">
+        <field name="name">cargo.estudiante.lines.search.view</field>
+        <field name="model">aca.cargo.estudiante.lines</field>
+        <field name="arch" type="xml">
+            <search>
+                <!-- busqueda rapida -->
+                <field name="estudiante_id" string="Nombre del estudiante"/>
+                <field name="responsable_id" string="Nombre del responsable"/>
+                <!-- agrupacion rapida -->
+                <group expand="0" string="Agrupar por" colspan="12" col="10">
+                    <filter name="estudiante_id" string="Estudiante" context="{'group_by':'estudiante_id'}" />
+                    <filter name="responsable_id" string="Responsable" context="{'group_by':'responsable_id'}" />
+                </group>
+
+            </search>
+        </field>
+    </record>
+
+</odoo>

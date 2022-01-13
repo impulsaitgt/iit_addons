@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+
+<odoo>
+
+    <record id = "sequence_aca_estudiantes" model="ir.sequence">
+        <field name="name">Secuencia de Estudiantes</field>
+        <field name="code">aca.estudiantes.codigo</field>
+        <field name="active">TRUE</field>
+        <field name="prefix">EST</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <record id = "sequence_aca_contratos" model="ir.sequence">
+        <field name="name">Secuencia de Contratos</field>
+        <field name="code">aca.contratos.codigo</field>
+        <field name="active">TRUE</field>
+        <field name="prefix">CONT</field>
+        <field name="padding">6</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+</odoo>
