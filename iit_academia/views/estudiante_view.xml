@@ -32,8 +32,6 @@
                         <group>
                             <field name="cui" placeholder="CUI"/>
                             <field name="genero" placeholder="Genero"/>
-                            <field name="lentes" placeholder="Utiliza lentes"/>
-
                             <field name="talla" placeholder="Talla"/>
                             <field name="estatura"/>
                             <field name="fecha_nacimiento" placeholder="Fecha Nacimiento"/>
@@ -62,7 +60,6 @@
                 <field name="name"/>
                 <field name="fecha_nacimiento"/>
                 <field name="genero"/>
-                <field name="lentes" widget="badge" decoration-danger="lentes == 'N'" decoration-success="lentes == 'S'" />
                 <field name="cui"/>
                 <field name="peso"/>
                 <field name="talla"/>

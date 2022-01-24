@@ -7,7 +7,6 @@ class Estudiante(models.Model):
     codigo = fields.Char(string='Codigo', copy='False', default='Nuevo', readonly=True)
     fecha_nacimiento = fields.Date(string='Fecha de nacimiento',required=True)
     genero = fields.Selection([ ('M','Masculino'),('F','Femenino')],string='Genero',required=True)
-    lentes = fields.Selection([('S', 'Si'), ('N', 'No')], string='Utiliza Lentes', required=True)
     cui = fields.Char(string='CUI', required=True)
     status_contratos = fields.Char(string='Status Contratos',compute="_contratos_",default='Nuevo')
     status_torneos = fields.Char(string='Status Torneos',compute="_torneos_",default='Nuevo')

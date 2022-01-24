@@ -8,7 +8,6 @@ class CargoEstudiante(models.Model):
 
     name = fields.Char(string='Referencia', default = 'Nuevo')
     fecha = fields.Date(string='Fecha',default=datetime.today(), readonly=True)
-    mes = fields.Integer(string='Mes',compute='_mes_', readonly=True)
     cargo_estudiante_lines = fields.One2many(comodel_name="aca.cargo.estudiante.lines",inverse_name='cargo_estudiante_id')
     state = fields.Selection([('draft', 'Borrador'), ('published', 'Publicado'), ('cancelled', 'Cancelado')], string='Estado', default='draft')
     monto = fields.Float(string='Monto Total', readonly=True, compute='_monto_')
@@ -42,6 +41,7 @@ class CargoEstudiante(models.Model):
         contratos = self.env['aca.contrato'].search([('status', '=', '1')])
         torneos = self.env['aca.torneo'].search([('status', '=', '1')])
         mes = int(str(self.fecha).split('-')[1])
+        anio = int(str(self.fecha).split('-')[0])
 
         normal = self.env['account.journal'].search([('aca_tipo_registro', '=', '2')]).id
         donacion = self.env['account.journal'].search([('aca_tipo_registro', '=', '3')]).id
@@ -67,7 +67,7 @@ class CargoEstudiante(models.Model):
                     'estudiante_id': contrato.estudiante_id,
                     'journal_id' : donacion,
                     'payment_reference' : contrato.name,
-                    'invoice_line_ids': [(0, 0, {'product_id': inscripcion, 'price_unit': contrato.mensualidad})]
+                    'invoice_line_ids': [(0, 0, {'product_id': inscripcion, 'price_unit': contrato.inscripcion})]
                 }
 
                 cargo = self.env['account.move'].create(valscargo)
@@ -126,13 +126,15 @@ class CargoEstudiante(models.Model):
                     cargo.write(valslinea)
 
             # Genera el cargo mensualidad
-            cargos = (self.env['aca.cargo.estudiante.lines'].search_count([('cargo_estudiante_id.mes', '=', mes),
+            cargos = (self.env['aca.cargo.estudiante.lines'].search_count([('mes', '=', mes),
+                                                                           ('anio', '=', anio),
                                                                            ('contrato_id', '=', contrato.id),
                                                                            ('cargo_id.state', '!=', 'cancel'),
                                                                            ('tipo', '=', 'Mensualidad')])) > 0
 
             # Verifica si no tiene ya creados cargos
             if not cargos:
+
                 valscargo = {
                     'move_type' : 'out_invoice',
                     'state' : 'draft',
@@ -150,6 +152,8 @@ class CargoEstudiante(models.Model):
                              'estudiante_id': contrato.estudiante_id.id,
                              'responsable_id': contrato.responsable_id.id,
                              'cargo_estudiante_id': self.id,
+                             'anio' : anio,
+                             'mes' : mes,
                              'tipo' : 'Mensualidad'}
 
                 cargos_estudiante = self.env['aca.cargo.estudiante'].search([('id', '=', self.id)])
@@ -248,6 +252,8 @@ class CargoEstudianteLines(models.Model):
     payment_state = fields.Char(string="Estado de pago",compute="_lineas_" )
     fecha_cargo = fields.Date(string='Fecha', readonly=True)
     tipo = fields.Char(string='Tipo de Cargo', readonly=True)
+    mes = fields.Integer(string='Mes', readonly=True, default=0)
+    anio = fields.Integer(string='Mes', readonly=True, default=0)
 
 
     def _lineas_(self):
