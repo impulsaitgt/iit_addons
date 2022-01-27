@@ -1,8 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-accesos_estudiantes_administrador,Acceso a estudiantes,model_aca_estudiante,academia_group_administrador,1,1,1,1
-accesos_contratos_administrador,Acceso a contratos,model_aca_contrato,academia_group_administrador,1,1,1,1
-accesos_contratos_administrador_lineas,Acceso a contratos lineas,model_aca_contrato_lines,academia_group_administrador,1,1,1,1
-accesos_torneos_administrador,Acceso a torneos,model_aca_torneo,academia_group_administrador,1,1,1,1
-accesos_torneos_administrador_lineas,Acceso a torneos lineas,model_aca_torneo_lines,academia_group_administrador,1,1,1,1
-accesos_cargos_automaticos_administrador,Acceso a cargos automaticos,model_aca_cargo_estudiante,academia_group_administrador,1,1,1,1
-accesos_cargos_automaticos_lineas_administrador,Acceso a cargos automaticos lineas,model_aca_cargo_estudiante_lines,academia_group_administrador,1,1,1,1
+accesos_inmuebles_administrador,Acceso a inmuebles,model_lot_inmueble,academia_group_administrador,1,1,1,1

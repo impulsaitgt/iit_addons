@@ -1,26 +1,17 @@
 # -*- coding: utf-8 -*-
 {
-    'name' : 'Especializacion Academia ',
+    'name' : 'Especializacion Lotificacion ',
     'summary':"""
-        Especializacion Academia
+        Especializacion Lotificacion
     """,
-    'author':'Lester Paiz',
+    'author':'Alexander Paiz/Lester Paiz',
     'category': 'General',
     'version' : '1.0.0',
     'depends': [
-        "account"
     ],
     'data': [
-        'security/academia_security.xml',
+        'security/lotificacion_security.xml',
         'security/ir.model.access.csv',
-        'views/menu_view.xml',
-        'views/estudiante_view.xml',
-        'views/contrato_view.xml',
-        'views/torneo_view.xml',
-        'views/cargo_estudiante_view.xml',
-        'views/account_journal_view.xml',
-        'views/account_move_view.xml',
-        'views/product_template_view.xml',
-        'views/sequences.xml'
+        'views/menu_view.xml'
     ]
 }
