@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+
+<odoo>
+
+    <record id="inmueble_action" model="ir.actions.act_window">
+        <field name="name">Inmuebles</field>
+        <field name="res_model">lot.inmueble</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <record id="mora_action" model="ir.actions.act_window">
+        <field name="name">Mora</field>
+        <field name="res_model">lot.mora</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+     <record id="cotizador_action" model="ir.actions.act_window">
+        <field name="name">Cotizador</field>
+        <field name="res_model">lot.cotizador</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <menuitem name="Lotificacion" id="lotificacion_menu"/>
+    <menuitem name="Inmuebles" id="inmueble_menu" parent="lotificacion_menu"/>
+    <menuitem name="Inmuebles" id="inmueble_opcion" parent="inmueble_menu" action="inmueble_action"/>
+    <menuitem name="Configuracion" id="configuracion_menu" parent="lotificacion_menu"/>
+    <menuitem name="Mora" id="mora_opcion" parent="configuracion_menu" action="mora_action"/>
+    <menuitem name="Cotizador" id="cotizador_opcion" parent="configuracion_menu" action="cotizador_action"/>
+
+</odoo>

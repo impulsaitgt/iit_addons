@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+
+<odoo>
+    <!--Vista formulario -->
+    <record id="inmueble_form_view" model="ir.ui.view">
+        <field name="name">inmueble.form.view</field>
+        <field name="model">lot.inmueble</field>
+        <field name="arch" type="xml">
+                <form string="Inmueble">
+                    <sheet>
+                        <group>
+                            <group>
+                                <h1>
+                                    <field name="name" placeholder="Nombre completo"/>
+                                </h1>
+                            </group>
+                        </group>
+                        <group>
+                            <group>
+                                <field name="direccion" placeholder="Direccion"/>
+                                <field name="numero_de_escritura" placeholder="Numero de escritura"/>
+                                <field name="precio_a_publico" placeholder="Precio a publico"/>
+                                <field name="precio_minimo" placeholder="Precio minimo"/>
+                                <field name="reserva" placeholder="Reserva"/>
+                                <field name="foto" placeholder="Foto"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+        </field>
+    </record>
+         <!--Vista de arbol-->
+    <record id="inmueble_tree_view" model="ir.ui.view">
+            <field name="name">inmueble.tree.view</field>
+            <field name="model">lot.inmueble</field>
+            <field name="arch" type="xml">
+                    <tree string="Inmuebles">
+                        <field name="name"/>
+                        <field name="direccion"/>
+                        <field name="numero_de_escritura"/>
+                        <field name="precio_a_publico"/>
+                        <field name="precio_minimo"/>
+                        <field name="reserva"/>
+                        <field name="foto"/>
+                    </tree>
+            </field>
+    </record>
+</odoo>
