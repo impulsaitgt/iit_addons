@@ -30,11 +30,15 @@
                         <group>
                             <field name="inmueble_id" placeholder="Inmueble"></field>
                             <field name="cliente_id" placeholder="Cliente"></field>
-                            <field name="enganche" placeholder="Enganche"></field>
                             <field name="fecha_inicial" placeholder="Fecha inicial"></field>
                             <field name="plazo" placeholder="Plazo"></field>
                             <field name="tasa_de_interes" placeholder="Tasa de interes"></field>
+                        </group>
+                        <group>
                             <field name="tipo_de_interes" palceholder="Tipo de interes"></field>
+                            <field name="precio" placeholder="Precio"></field>
+                            <field name="enganche" placeholder="Enganche"></field>
+                            <field name="monto_financiar" placeholder="Monto a financiar"></field>
                         </group>
                     </group>
                     <notebook>
@@ -64,11 +68,13 @@
                 <field name="name"></field>
                 <field name="inmueble_id"></field>
                 <field name="cliente_id"></field>
-                <field name="enganche"></field>
                 <field name="fecha_inicial"></field>
                 <field name="plazo"></field>
                 <field name="tasa_de_interes"></field>
                 <field name="tipo_de_interes"></field>
+                <field name="precio"></field>
+                <field name="enganche"></field>
+                <field name="monto_financiar"></field>
             </tree>
         </field>
     </record>

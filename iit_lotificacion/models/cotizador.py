@@ -14,6 +14,8 @@ class Cotizador(models.Model):
     cotizador_lines = fields.One2many(comodel_name='lot.cotizador.lines', inverse_name='cotizador_id')
     state = fields.Selection([('draft', 'Borrador'), ('published', 'Publicado'), ('cancelled', 'Cancelado')],
                              string='Estado', default='draft')
+    precio = fields.Float(string="Precio", default=0)
+    monto_financiar = fields.Float(string="Monto a financiar", readonly=True, compute="_montof_")
 
     @api.model
     def create(self, vals):
@@ -23,6 +25,7 @@ class Cotizador(models.Model):
         result = super(Cotizador,self).create(vals)
         return result
 
+
     def action_genera_cuotas(self):
         # elimino cuotas anteriores
         lineas = self.cotizador_lines
@@ -30,14 +33,25 @@ class Cotizador(models.Model):
             linea.unlink()
 
         # genero cuotas
+        tasa_mensual = self.tasa_de_interes / 100 / 12
+        factor1 = 1 - ((1 + tasa_mensual) ** (self.plazo * -1))
+        factor2 = factor1 / tasa_mensual
+        cuota_base = round(self.monto_financiar / factor2, 2)
+        financiamiento = self.monto_financiar
+
+
         i = 0
         while i < self.plazo:
+            interes = round(financiamiento * tasa_mensual, 2)
+            capital = round(cuota_base - interes, 2)
+            financiamiento = financiamiento - capital
+
             i += 1
             valscuota = {
                 'cuota': i,
                 'fecha': self.fecha_inicial,
-                'capital': 1000,
-                'intereses': 100,
+                'capital': capital,
+                'intereses': interes,
                 'cotizador_id': self.id
             }
             cotizador = self.env["lot.cotizador"].search([("id", "=", self.id)])
@@ -54,6 +68,9 @@ class Cotizador(models.Model):
     def action_cancela(self):
         print("Cancelar")
 
+    def _montof_(self):
+        self.monto_financiar = self.precio - self.enganche
+
 class CotizadorLines(models.Model):
     _name = 'lot.cotizador.lines'
 
@@ -65,7 +82,9 @@ class CotizadorLines(models.Model):
     cuota_total = fields.Float(string="Cuota total", compute="_cuota_total_")
 
     def _cuota_total_(self):
+
         for linea in self:
             linea.cuota_total = linea.capital + linea.intereses
+
 
 
