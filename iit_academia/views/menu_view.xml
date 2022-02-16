@@ -40,6 +40,11 @@
     <menuitem name="Contratos" id="contratos_opcion" parent="estudiante_menu" action="contratos_action"/>
     <menuitem name="Torneos" id="torneos_opcion" parent="estudiante_menu" action="torneos_action"/>
 
+    <menuitem name="Mantenimientos" id="mantenimientos_menu" parent="academia_menu" />
+    <menuitem name="Clientes" id="clientes_opcion" parent="mantenimientos_menu" action="account.res_partner_action_customer"/>
+    <menuitem name="Productos" id="productos_opcion" parent="mantenimientos_menu" action="account.product_product_action_sellable"/>
+
+
     <menuitem name="Procesos" id="proceso_menu" parent="academia_menu" />
     <menuitem name="Cargos automaticos" id="cargos_automaticos_opcion" parent="proceso_menu" action="cargos_automaticos_action"/>
 
