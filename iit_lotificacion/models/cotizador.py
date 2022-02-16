@@ -17,6 +17,9 @@ class Cotizador(models.Model):
                              string='Estado', default='draft')
     precio = fields.Float(string="Precio", default=0)
     monto_financiar = fields.Float(string="Monto a financiar", readonly=True, compute="_montof_")
+    suma_capital = fields.Float(string="Total Capital", readonly=True, compute="_montof_")
+    suma_intereses = fields.Float(string="Total Interes", readonly=True, compute="_montof_")
+    suma_cuotas = fields.Float(string="Total", readonly=True, compute="_montof_")
 
     @api.model
     def create(self, vals):
@@ -62,21 +65,28 @@ class Cotizador(models.Model):
             fecha_cuota = fecha_cuota + delta_mes
 
     def action_confirma_cuotas(self):
-        print("Le di confirmar ", self)
-        print("ejemplo ", self.env)
         self.state="published"
 
     def action_reestablece_borrador(self):
-        print("Restablecer")
         self.state="draft"
 
     def action_cancela(self):
         print("Cancelar")
 
     def _montof_(self):
-        print(self)
         for cotizador in self:
             cotizador.monto_financiar = cotizador.precio - cotizador.enganche
+            capital = 0
+            intereses = 0
+            cuotas = 0
+            for linea in cotizador.cotizador_lines:
+                capital = capital + linea.capital
+                intereses = intereses + linea.intereses
+                cuotas = cuotas + linea.cuota_total
+            cotizador.suma_capital = capital
+            cotizador.suma_intereses = intereses
+            cotizador.suma_cuotas = cuotas
+
 
 class CotizadorLines(models.Model):
     _name = 'lot.cotizador.lines'
@@ -88,9 +98,9 @@ class CotizadorLines(models.Model):
     cuota = fields.Integer(string="Cuota", default=0)
     cuota_total = fields.Float(string="Cuota total", compute="_cuota_total_")
     valor_pagado = fields.Float(string="Valor Pagado", default=0)
+    state = fields.Char(string="Estado",compute="_estado_")
 
     def _cuota_total_(self):
-
         for linea in self:
             linea.cuota_total = linea.capital + linea.intereses
 

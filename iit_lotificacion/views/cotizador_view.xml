@@ -40,6 +40,11 @@
                             <field name="enganche" placeholder="Enganche"></field>
                             <field name="monto_financiar" placeholder="Monto a financiar"></field>
                         </group>
+                        <group>
+                            <field name="suma_capital"></field>
+                            <field name="suma_intereses"></field>
+                            <field name="suma_cuotas"></field>
+                        </group>
                     </group>
                     <notebook>
                         <page string="Plan de pagos" name="plan_pagos">
@@ -50,8 +55,7 @@
                                     <field name="capital" optional="show"/>
                                     <field name="intereses" optional="show"/>
                                     <field name="cuota_total" optional="show"/>
-                                    <field name="valor_pagado" optional="show"
-                                           attrs="{'invisible': [['state', '=', 'draft']]}"/>
+                                    <field name="valor_pagado" optional="show"/>
                                 </tree>
                             </field>
                         </page>
