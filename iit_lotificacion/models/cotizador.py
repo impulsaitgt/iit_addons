@@ -1,4 +1,5 @@
 from odoo import models,fields,api
+from dateutil.relativedelta import relativedelta
 
 class Cotizador(models.Model):
     _name = 'lot.cotizador'
@@ -38,6 +39,8 @@ class Cotizador(models.Model):
         factor2 = factor1 / tasa_mensual
         cuota_base = round(self.monto_financiar / factor2, 2)
         financiamiento = self.monto_financiar
+        fecha_cuota = self.fecha_inicial
+        delta_mes = relativedelta(months=1)
 
 
         i = 0
@@ -49,16 +52,18 @@ class Cotizador(models.Model):
             i += 1
             valscuota = {
                 'cuota': i,
-                'fecha': self.fecha_inicial,
+                'fecha': fecha_cuota,
                 'capital': capital,
                 'intereses': interes,
                 'cotizador_id': self.id
             }
             cotizador = self.env["lot.cotizador"].search([("id", "=", self.id)])
             cotizador.cotizador_lines.create(valscuota)
+            fecha_cuota = fecha_cuota + delta_mes
 
     def action_confirma_cuotas(self):
-        print("Le di confirmar")
+        print("Le di confirmar ", self)
+        print("ejemplo ", self.env)
         self.state="published"
 
     def action_reestablece_borrador(self):
@@ -69,7 +74,9 @@ class Cotizador(models.Model):
         print("Cancelar")
 
     def _montof_(self):
-        self.monto_financiar = self.precio - self.enganche
+        print(self)
+        for cotizador in self:
+            cotizador.monto_financiar = cotizador.precio - cotizador.enganche
 
 class CotizadorLines(models.Model):
     _name = 'lot.cotizador.lines'
@@ -80,6 +87,7 @@ class CotizadorLines(models.Model):
     intereses = fields.Float(string="Intereses", default=0)
     cuota = fields.Integer(string="Cuota", default=0)
     cuota_total = fields.Float(string="Cuota total", compute="_cuota_total_")
+    valor_pagado = fields.Float(string="Valor Pagado", default=0)
 
     def _cuota_total_(self):
 
