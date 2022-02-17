@@ -1,5 +1,6 @@
 from odoo import models,fields,api
 from dateutil.relativedelta import relativedelta
+import math
 
 class Cotizador(models.Model):
     _name = 'lot.cotizador'
@@ -41,6 +42,12 @@ class Cotizador(models.Model):
         factor1 = 1 - ((1 + tasa_mensual) ** (self.plazo * -1))
         factor2 = factor1 / tasa_mensual
         cuota_base = round(self.monto_financiar / factor2, 2)
+        cbd10 = cuota_base / 10
+        truncado = math.trunc(cbd10) * 10
+        delta = round(cuota_base - truncado, 2)
+        print("cbd10 ", cbd10)
+        print("delta ", delta)
+        print("truncado ", truncado)
         financiamiento = self.monto_financiar
         fecha_cuota = self.fecha_inicial
         delta_mes = relativedelta(months=1)
@@ -48,9 +55,17 @@ class Cotizador(models.Model):
 
         i = 0
         while i < self.plazo:
-            interes = round(financiamiento * tasa_mensual, 2)
-            capital = round(cuota_base - interes, 2)
-            financiamiento = financiamiento - capital
+            if (i == 0):
+                interes = round(financiamiento * tasa_mensual, 2)
+                capital = round(cuota_base - interes + (delta * (self.plazo - 1)), 2)
+                financiamiento = financiamiento - capital
+            elif (i == self.plazo - 1):
+                capital = financiamiento
+                interes = cuota_base - capital
+            else:
+                interes = round(financiamiento * tasa_mensual, 2)
+                capital = round(truncado - interes, 2)
+                financiamiento = financiamiento - capital
 
             i += 1
             valscuota = {
@@ -98,7 +113,7 @@ class CotizadorLines(models.Model):
     cuota = fields.Integer(string="Cuota", default=0)
     cuota_total = fields.Float(string="Cuota total", compute="_cuota_total_")
     valor_pagado = fields.Float(string="Valor Pagado", default=0)
-    state = fields.Char(string="Estado",compute="_estado_")
+
 
     def _cuota_total_(self):
         for linea in self:
