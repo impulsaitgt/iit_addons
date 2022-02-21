@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="report_cotizacion">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="cotizacion">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="row" id="hash_header">
+                            <div class="col-12">
+                                <br/>
+                                <h3>Cotizacion: <span t-field="cotizacion.name"/></h3>
+                                <h3>Cliente: <span t-field="cotizacion.cliente_id"/></h3>
+                                <h3>Inmueble: <span t-field="cotizacion.inmueble_id"/></h3>
+                                <br/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12" id="hash_data_consistency_table">
+                                <table class="table table-bordered" style="table-layout: fixed">
+                                    <thead style="display: table-row-group">
+                                        <tr>
+                                            <th class="text-center" style="width: 20%" scope="col" >Cuota</th>
+                                            <th class="text-center" style="width: 20%" scope="col">Fecha</th>
+                                            <th class="text-center" style="width: 20%" scope="col">Capital</th>
+                                            <th class="text-center" style="width: 20%" scope="col">Intereses</th>
+                                            <th class="text-center" style="width: 20%" scope="col">Cuota Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="cotizacion.cotizador_lines" t-as="linea">
+                                            <tr>
+                                                <td class="text-center">
+                                                    <span t-field="linea.cuota"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="linea.fecha"/>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-field="linea.capital" t-options='{"widget": "float" , "precision" : 2}'/>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-field="linea.intereses" t-options='{"widget": "float" , "precision" : 2}'/>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-field="linea.cuota_total" t-options='{"widget": "float" , "precision" : 2}'/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
