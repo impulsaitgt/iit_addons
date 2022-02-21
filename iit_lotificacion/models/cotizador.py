@@ -14,6 +14,8 @@ class Cotizador(models.Model):
     tasa_de_interes = fields.Float(string="Tasa de interes",required=True)
     cliente_id = fields.Many2one(comodel_name='res.partner', string="Cliente", required=True)
     cotizador_lines = fields.One2many(comodel_name='lot.cotizador.lines', inverse_name='cotizador_id')
+    cotizador_enganche_lines = fields.One2many(comodel_name='lot.cotizador.enganche.lines', inverse_name='cotizador_id')
+
     state = fields.Selection([('draft', 'Borrador'), ('published', 'Publicado'), ('cancelled', 'Cancelado')],
                              string='Estado', default='draft')
     precio = fields.Float(string="Precio", default=0)
@@ -21,6 +23,10 @@ class Cotizador(models.Model):
     suma_capital = fields.Float(string="Total Capital", readonly=True, compute="_montof_")
     suma_intereses = fields.Float(string="Total Interes", readonly=True, compute="_montof_")
     suma_cuotas = fields.Float(string="Total", readonly=True, compute="_montof_")
+    cuota_uno = fields.Float(string="Cuota 1", readonly=True, default=0)
+    cuota_normal = fields.Float(string="Cuota Normal", readonly=True, default=0)
+    enganche_pagado = fields.Float(string="Enganche Pagado", readonly=True, compute="_montof_")
+
 
     @api.model
     def create(self, vals):
@@ -44,10 +50,11 @@ class Cotizador(models.Model):
         cuota_base = round(self.monto_financiar / factor2, 2)
         cbd10 = cuota_base / 10
         truncado = math.trunc(cbd10) * 10
+        valsnormal = {
+            'cuota_normal': truncado
+        }
+        self.write(valsnormal)
         delta = round(cuota_base - truncado, 2)
-        print("cbd10 ", cbd10)
-        print("delta ", delta)
-        print("truncado ", truncado)
         financiamiento = self.monto_financiar
         fecha_cuota = self.fecha_inicial
         delta_mes = relativedelta(months=1)
@@ -59,6 +66,13 @@ class Cotizador(models.Model):
                 interes = round(financiamiento * tasa_mensual, 2)
                 capital = round(cuota_base - interes + (delta * (self.plazo - 1)), 2)
                 financiamiento = financiamiento - capital
+
+                vals1 = {
+                    'cuota_uno': round(interes + capital, 2)
+                }
+                self.write(vals1)
+
+
             elif (i == self.plazo - 1):
                 capital = financiamiento
                 interes = cuota_base - capital
@@ -75,8 +89,11 @@ class Cotizador(models.Model):
                 'intereses': interes,
                 'cotizador_id': self.id
             }
-            cotizador = self.env["lot.cotizador"].search([("id", "=", self.id)])
-            cotizador.cotizador_lines.create(valscuota)
+            # cotizador = self.env["lot.cotizador"].search([("id", "=", self.id)])
+            # cotizador.cotizador_lines.create(valscuota)
+            # self.env["lot.cotizador"].search([("id", "=", self.id)]).cotizador_lines.create(valscuota)
+            self.cotizador_lines.create(valscuota)
+
             fecha_cuota = fecha_cuota + delta_mes
 
     def action_confirma_cuotas(self):
@@ -86,7 +103,12 @@ class Cotizador(models.Model):
         self.state="draft"
 
     def action_cancela(self):
-        print("Cancelar")
+        self.state="cancelled"
+
+    def action_registrar_pago(self):
+        action = self.env.ref('iit_lotificacion.action_registra_pago').read()[0]
+        action['domain'] = [('lot.registra.pago.wizard.cotizador_id', '=', self.id)]
+        return action
 
     def _montof_(self):
         for cotizador in self:
@@ -101,6 +123,10 @@ class Cotizador(models.Model):
             cotizador.suma_capital = capital
             cotizador.suma_intereses = intereses
             cotizador.suma_cuotas = cuotas
+            enganche_pagado = 0
+            for eng in cotizador.cotizador_enganche_lines:
+                enganche_pagado = enganche_pagado + eng.valor_pagado
+            cotizador.enganche_pagado = enganche_pagado
 
 
 class CotizadorLines(models.Model):
@@ -108,16 +134,28 @@ class CotizadorLines(models.Model):
 
     cotizador_id = fields.Many2one(comodel_name='lot.cotizador')
     fecha = fields.Date(string="Fecha", required=True)
+    fecha_pago = fields.Date(string="Fecha Pagado")
     capital = fields.Float(string="Capital", default=0)
     intereses = fields.Float(string="Intereses", default=0)
     cuota = fields.Integer(string="Cuota", default=0)
     cuota_total = fields.Float(string="Cuota total", compute="_cuota_total_")
     valor_pagado = fields.Float(string="Valor Pagado", default=0)
+    boleta_id = fields.Many2one(comodel_name='lot.boleta')
+    cargo_capital_id = fields.Many2one(string="Cargo capital", comodel_name='account.move', readonly=True)
+    cargo_intereses_id = fields.Many2one(string="Factura Interes", comodel_name='account.move', readonly=True)
+    cargo_mora_id = fields.Many2one(string="Factura Mora", comodel_name='account.move', readonly=True)
 
 
     def _cuota_total_(self):
         for linea in self:
             linea.cuota_total = linea.capital + linea.intereses
 
+class CotizadorEngancheLines(models.Model):
+    _name = 'lot.cotizador.enganche.lines'
 
+    cotizador_id = fields.Many2one(comodel_name='lot.cotizador')
+    fecha = fields.Date(string="Fecha", required=True)
+    valor_pagado = fields.Float(string="Valor Pagado", default=0)
+    boleta_id = fields.Many2one(comodel_name='lot.boleta')
+    cargo_enganche_id = fields.Many2one(string="Cargo Enganche", comodel_name='account.move', readonly=True)
 

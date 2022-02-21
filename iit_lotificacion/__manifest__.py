@@ -17,6 +17,10 @@
         'views/inmueble_view.xml',
         'views/mora_view.xml',
         'views/cotizador_view.xml',
-        'views/sequences.xml'
+        'views/product_template_view.xml',
+        'views/account_journal_view.xml',
+        'views/account_journal_view.xml',
+        'views/sequences.xml',
+        'wizard/registra_pago.xml'
     ]
 }

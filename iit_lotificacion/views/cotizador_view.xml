@@ -17,6 +17,8 @@
                             attrs="{'invisible': [('state', '=', 'draft')]}"/>
                     <button name="action_cancela" type="object" string="Cancela"
                             attrs="{'invisible': ['|',('state', '=', 'published'),('state', '=', 'cancelled')]}"/>
+                    <button name="action_registrar_pago" type="object" string="Registrar Pago" class="oe_highlight"
+                            attrs="{'invisible': ['|',('state', '=', 'draft'),('state', '=', 'cancelled')]}"/>
                 </header>
                 <sheet>
                     <group>
@@ -44,18 +46,42 @@
                             <field name="suma_capital"></field>
                             <field name="suma_intereses"></field>
                             <field name="suma_cuotas"></field>
+                            <field name="cuota_uno"></field>
+                            <field name="cuota_normal"></field>
+                            <field name="enganche_pagado"></field>
                         </group>
                     </group>
                     <notebook>
                         <page string="Plan de pagos" name="plan_pagos">
-                            <field name="cotizador_lines" widget="section_and_note_one2many" mode="tree,kanban">
-                                <tree editable="botoom" string="Plan de pagos">
+                            <field name="cotizador_lines" widget="section_and_note_many2many many2many_checkboxes" mode="tree,kanban">
+                                <tree string="Plan de pagos">
                                     <field name="cuota" optional="show"/>
                                     <field name="fecha" optional="show"/>
                                     <field name="capital" optional="show"/>
                                     <field name="intereses" optional="show"/>
                                     <field name="cuota_total" optional="show"/>
+                                    <field name="valor_pagado" optional="show"
+                                           attrs="{'column_invisible': ['|',('parent.state', '=', 'draft'),('parent.state', '=', 'cancelled')]}"/>
+                                    <field name="boleta_id" optional="show"
+                                           attrs="{'column_invisible': ['|',('parent.state', '=', 'draft'),('parent.state', '=', 'cancelled')]}"/>
+                                    <field name="fecha_pago" optional="show"
+                                           attrs="{'column_invisible': ['|',('parent.state', '=', 'draft'),('parent.state', '=', 'cancelled')]}"/>
+                                    <field name="cargo_capital_id" optional="show"
+                                           attrs="{'column_invisible': ['|',('parent.state', '=', 'draft'),('parent.state', '=', 'cancelled')]}"/>
+                                    <field name="cargo_intereses_id" optional="show"
+                                           attrs="{'column_invisible': ['|',('parent.state', '=', 'draft'),('parent.state', '=', 'cancelled')]}"/>
+                                    <field name="cargo_mora_id" optional="show"
+                                           attrs="{'column_invisible': ['|',('parent.state', '=', 'draft'),('parent.state', '=', 'cancelled')]}"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Pagos de Enganche" name="pagos_enganche">
+                            <field name="cotizador_enganche_lines" widget="section_and_note_many2many" mode="tree">
+                                <tree string="Pagos de Enganche">
+                                    <field name="fecha" optional="show"/>
                                     <field name="valor_pagado" optional="show"/>
+                                    <field name="boleta_id" optional="show"/>
+                                    <field name="cargo_enganche_id" optional="show"/>
                                 </tree>
                             </field>
                         </page>
@@ -81,6 +107,9 @@
                 <field name="precio"></field>
                 <field name="enganche"></field>
                 <field name="monto_financiar"></field>
+                <field name="state" widget="badge" decoration-info="state == 'draft'"
+                                           decoration-success="state == 'published'"
+                                           decoration-muted="state == 'canceled'"/>
             </tree>
         </field>
     </record>

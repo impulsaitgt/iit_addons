@@ -1,0 +1,7 @@
+iit_cleanfact/__pycache__
+iit_cleanfact/models/__pycache__/*.pyc
+iit_fel/__pycache__
+
+# compiled python files
+*.py[co]
+__pycache__/
