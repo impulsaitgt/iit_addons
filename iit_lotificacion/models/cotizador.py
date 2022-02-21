@@ -10,7 +10,7 @@ class Cotizador(models.Model):
     inmueble_id = fields.Many2one(comodel_name='lot.inmueble', required=True)
     enganche = fields.Float(string="Enganche",required=True)
     fecha_inicial = fields.Date(string="Fecha inicial",required=True)
-    fecha_generacion = fields.Date(string="Fecha inicial",required=True, readonly=True)
+    fecha_generacion = fields.Date(string="Fecha generacion", readonly=True)
     plazo = fields.Integer(string="Plazo",required=True)
     tipo_de_interes = fields.Selection([ ('1','Sobre saldos'),('0','Flat')],string='Tipo de interes',required=True)
     tasa_de_interes = fields.Float(string="Tasa de interes",required=True)
