@@ -21,6 +21,8 @@
         'views/account_journal_view.xml',
         'views/account_journal_view.xml',
         'views/sequences.xml',
-        'wizard/registra_pago.xml'
+        'wizard/registra_pago.xml',
+        'report/report.xml',
+        'report/cotizacion_template.xml'
     ]
 }

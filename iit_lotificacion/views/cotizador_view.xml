@@ -1,6 +1,29 @@
 <?xml version="1.0" ?>
 
 <odoo>
+
+    <record id="action_imprime_cotizacion" model="ir.actions.server">
+        <field name="name">Imprime Cotizacion</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_lot_cotizador"/>
+        <field name="binding_model_id" ref="model_lot_cotizador"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = record.action_imprime_cotizacion()
+        </field>
+    </record>
+
+    <record id="action_imprime_estado_cuenta" model="ir.actions.server">
+        <field name="name">Imprime Estado de Cuenta</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_lot_cotizador"/>
+        <field name="binding_model_id" ref="model_lot_cotizador"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = record.action_imprime_estado_cuenta()
+        </field>
+    </record>
+
     <record id="cotizador_form_view" model="ir.ui.view">
         <field name="name">cotizador.form.view</field>
         <field name="model">lot.cotizador</field>

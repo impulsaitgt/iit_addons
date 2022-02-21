@@ -110,6 +110,12 @@ class Cotizador(models.Model):
         action['domain'] = [('lot.registra.pago.wizard.cotizador_id', '=', self.id)]
         return action
 
+    def action_imprime_cotizacion(self):
+        print("aqui imprimo cotizacion: ", self)
+
+    def action_imprime_estado_cuenta(self):
+        print("aqui imprimo estado de cuenta: ", self)
+
     def _montof_(self):
         for cotizador in self:
             cotizador.monto_financiar = cotizador.precio - cotizador.enganche

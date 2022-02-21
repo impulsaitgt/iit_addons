@@ -164,4 +164,11 @@ class RegistraPagoWizard(models.TransientModel):
 
                 pago_enganche = self.env['account.payment'].create(vals_pago)
 
+                vals_cargo_pago = {
+                    'payment_id': pago_enganche.id
+                }
+
+                cargo_enganche.write(vals_cargo_pago)
+
+                pago_enganche.action_post()
 
