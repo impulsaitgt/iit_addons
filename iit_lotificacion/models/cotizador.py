@@ -1,5 +1,6 @@
 from odoo import models,fields,api
 from dateutil.relativedelta import relativedelta
+from datetime import datetime
 import math
 
 class Cotizador(models.Model):
@@ -9,6 +10,7 @@ class Cotizador(models.Model):
     inmueble_id = fields.Many2one(comodel_name='lot.inmueble', required=True)
     enganche = fields.Float(string="Enganche",required=True)
     fecha_inicial = fields.Date(string="Fecha inicial",required=True)
+    fecha_generacion = fields.Date(string="Fecha inicial",required=True, readonly=True)
     plazo = fields.Integer(string="Plazo",required=True)
     tipo_de_interes = fields.Selection([ ('1','Sobre saldos'),('0','Flat')],string='Tipo de interes',required=True)
     tasa_de_interes = fields.Float(string="Tasa de interes",required=True)
@@ -26,6 +28,7 @@ class Cotizador(models.Model):
     cuota_uno = fields.Float(string="Cuota 1", readonly=True, default=0)
     cuota_normal = fields.Float(string="Cuota Normal", readonly=True, default=0)
     enganche_pagado = fields.Float(string="Enganche Pagado", readonly=True, compute="_montof_")
+    cuota_final = fields.Float(string="Cuota Normal", readonly=True, default=0)
 
 
     @api.model
@@ -51,7 +54,8 @@ class Cotizador(models.Model):
         cbd10 = cuota_base / 10
         truncado = math.trunc(cbd10) * 10
         valsnormal = {
-            'cuota_normal': truncado
+            'cuota_normal': truncado,
+            'fecha_generacion': datetime.today()
         }
         self.write(valsnormal)
         delta = round(cuota_base - truncado, 2)
@@ -75,7 +79,12 @@ class Cotizador(models.Model):
 
             elif (i == self.plazo - 1):
                 capital = financiamiento
-                interes = cuota_base - capital
+                interes = round(financiamiento * tasa_mensual, 2)
+
+                valsfinal = {
+                    'cuota_final': round(interes + capital, 2)
+                }
+                self.write(valsfinal)
             else:
                 interes = round(financiamiento * tasa_mensual, 2)
                 capital = round(truncado - interes, 2)

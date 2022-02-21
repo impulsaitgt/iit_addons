@@ -8,9 +8,14 @@
                         <div class="row" id="hash_header">
                             <div class="col-12">
                                 <br/>
-                                <h3>Cotizacion: <span t-field="cotizacion.name"/></h3>
-                                <h3>Cliente: <span t-field="cotizacion.cliente_id"/></h3>
-                                <h3>Inmueble: <span t-field="cotizacion.inmueble_id"/></h3>
+                                <h4>Cotizacion: <span t-field="cotizacion.name"/></h4>
+                                <h4>Cliente: <span t-field="cotizacion.cliente_id"/></h4>
+                                <h4>Inmueble: <span t-field="cotizacion.inmueble_id"/></h4>
+                                <h4>Precio: <span t-field="cotizacion.precio" t-options='{"widget": "float" , "precision" : 2}'/></h4>
+                                <h4>Enganche: <span t-field="cotizacion.enganche" t-options='{"widget": "float" , "precision" : 2}'/></h4>
+                                <h4>Monto a Financier: <span t-field="cotizacion.monto_financiar" t-options='{"widget": "float" , "precision" : 2}'/></h4>
+                                <h4>Tasa de Interes: <span t-field="cotizacion.tasa_de_interes" t-options='{"widget": "float" , "precision" : 2}'/>%</h4>
+                                <h4>Fecha de Generacion: <span t-field="cotizacion.fecha_generacion" t-options='{"widget": "date" }'/></h4>
                                 <br/>
                             </div>
                         </div>
@@ -47,6 +52,24 @@
                                             </tr>
                                         </t>
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td class="text-center">
+                                            </td>
+                                            <td>
+                                                Totales
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="cotizacion.suma_capital" t-options='{"widget": "float" , "precision" : 2}'/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="cotizacion.suma_intereses" t-options='{"widget": "float" , "precision" : 2}'/>
+                                            </td>
+                                            <td class="text-right">
+                                                <span t-field="cotizacion.suma_cuotas" t-options='{"widget": "float" , "precision" : 2}'/>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
