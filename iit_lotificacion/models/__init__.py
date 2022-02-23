@@ -1,1 +1,1 @@
-from . import inmueble, mora, cotizador, boleta, product_template, account_move, account_journal
+from . import inmueble, mora, cotizador, product_template, account_move, account_journal

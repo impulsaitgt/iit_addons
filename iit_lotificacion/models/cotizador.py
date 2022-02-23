@@ -1,6 +1,7 @@
 from odoo import models,fields,api
+from odoo.exceptions import ValidationError
 from dateutil.relativedelta import relativedelta
-from datetime import datetime
+from datetime import datetime, date
 import math
 
 class Cotizador(models.Model):
@@ -12,7 +13,6 @@ class Cotizador(models.Model):
     fecha_inicial = fields.Date(string="Fecha inicial",required=True)
     fecha_generacion = fields.Date(string="Fecha generacion", readonly=True)
     plazo = fields.Integer(string="Plazo",required=True)
-    tipo_de_interes = fields.Selection([ ('1','Sobre saldos'),('0','Flat')],string='Tipo de interes',required=True)
     tasa_de_interes = fields.Float(string="Tasa de interes",required=True)
     cliente_id = fields.Many2one(comodel_name='res.partner', string="Cliente", required=True)
     cotizador_lines = fields.One2many(comodel_name='lot.cotizador.lines', inverse_name='cotizador_id')
@@ -28,7 +28,9 @@ class Cotizador(models.Model):
     cuota_uno = fields.Float(string="Cuota 1", readonly=True, default=0)
     cuota_normal = fields.Float(string="Cuota Normal", readonly=True, default=0)
     enganche_pagado = fields.Float(string="Enganche Pagado", readonly=True, compute="_montof_")
+    valor_pagado = fields.Float(string="Valor Pagado", readonly=True, compute="_montof")
     cuota_final = fields.Float(string="Cuota Normal", readonly=True, default=0)
+    state_payment = fields.Char(string="Estado de Pago", readonly=True)
 
 
     @api.model
@@ -39,6 +41,15 @@ class Cotizador(models.Model):
         result = super(Cotizador,self).create(vals)
         return result
 
+    @api.onchange('inmueble_id')
+    def onchange_inmueble_id(self):
+        self.precio = self.inmueble_id.precio_a_publico
+        self.enganche = self.inmueble_id.reserva
+
+    @api.onchange('precio')
+    def onchange_precio(self):
+        if self.precio < self.inmueble_id.precio_minimo:
+            self.precio = self.inmueble_id.precio_a_publico
 
     def action_genera_cuotas(self):
         # elimino cuotas anteriores
@@ -131,17 +142,33 @@ class Cotizador(models.Model):
             capital = 0
             intereses = 0
             cuotas = 0
+            valor_pagado = 0
+            state_payment = "Normal"
             for linea in cotizador.cotizador_lines:
                 capital = capital + linea.capital
                 intereses = intereses + linea.intereses
                 cuotas = cuotas + linea.cuota_total
+                valor_pagado = valor_pagado + linea.valor_pagado
+                if (linea.fecha < date.today()) and (round(linea.cuota_total,2) > round(linea.valor_pagado, 2)):
+                    state_payment = "Pagos pendientes"
             cotizador.suma_capital = capital
             cotizador.suma_intereses = intereses
             cotizador.suma_cuotas = cuotas
+            cotizador.valor_pagado = valor_pagado
+            if round(capital, 2) <= round(valor_pagado, 2):
+                state_payment = "Completamente Pagado"
+
+            if cotizador.state == 'draft':
+                state_payment = "Borrador"
+
+            if cotizador.state == 'cancelled':
+                state_payment = "Cancelado"
             enganche_pagado = 0
             for eng in cotizador.cotizador_enganche_lines:
                 enganche_pagado = enganche_pagado + eng.valor_pagado
             cotizador.enganche_pagado = enganche_pagado
+
+            cotizador.state_payment = state_payment
 
 
 class CotizadorLines(models.Model):
@@ -155,10 +182,11 @@ class CotizadorLines(models.Model):
     cuota = fields.Integer(string="Cuota", default=0)
     cuota_total = fields.Float(string="Cuota total", compute="_cuota_total_")
     valor_pagado = fields.Float(string="Valor Pagado", default=0)
-    boleta_id = fields.Many2one(comodel_name='lot.boleta')
+    boleta = fields.Char(string='Boleta')
     cargo_capital_id = fields.Many2one(string="Cargo capital", comodel_name='account.move', readonly=True)
     cargo_intereses_id = fields.Many2one(string="Factura Interes", comodel_name='account.move', readonly=True)
     cargo_mora_id = fields.Many2one(string="Factura Mora", comodel_name='account.move', readonly=True)
+    recibo_id = fields.Many2one(string="Recibo de Pago", comodel_name='account.payment', readonly=True)
 
 
     def _cuota_total_(self):
@@ -171,6 +199,8 @@ class CotizadorEngancheLines(models.Model):
     cotizador_id = fields.Many2one(comodel_name='lot.cotizador')
     fecha = fields.Date(string="Fecha", required=True)
     valor_pagado = fields.Float(string="Valor Pagado", default=0)
-    boleta_id = fields.Many2one(comodel_name='lot.boleta')
+    boleta = fields.Char(string='Boleta')
     cargo_enganche_id = fields.Many2one(string="Cargo Enganche", comodel_name='account.move', readonly=True)
+    recibo_id = fields.Many2one(string="Recibo de Pago", comodel_name='account.payment', readonly=True)
+
 

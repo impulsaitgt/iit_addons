@@ -23,8 +23,12 @@
     <menuitem name="Lotificacion" id="lotificacion_menu"/>
     <menuitem name="Inmuebles" id="inmueble_menu" parent="lotificacion_menu"/>
     <menuitem name="Inmuebles" id="inmueble_opcion" parent="inmueble_menu" action="inmueble_action"/>
-    <menuitem name="Configuracion" id="configuracion_menu" parent="lotificacion_menu"/>
-    <menuitem name="Mora" id="mora_opcion" parent="configuracion_menu" action="mora_action"/>
-    <menuitem name="Cotizador" id="cotizador_opcion" parent="configuracion_menu" action="cotizador_action"/>
+    <menuitem name="Clientes" id="clientes_opcion" parent="inmueble_menu" action="account.res_partner_action_customer"/>
+    <menuitem name="Productos" id="productos_opcion" parent="inmueble_menu" action="account.product_product_action_sellable"/>
+    <menuitem name="Facturas y Cargos" id="facturas_cargos_opcion" parent="inmueble_menu" action="account.action_move_out_invoice_type"/>
+    <menuitem name="Pagos" id="pagos_opcion" parent="inmueble_menu" action="account.action_account_payments"/>
+    <menuitem name="Procesos" id="procesos_menu" parent="lotificacion_menu"/>
+    <menuitem name="Mora" id="mora_opcion" parent="procesos_menu" action="mora_action"/>
+    <menuitem name="Cotizador" id="cotizador_opcion" parent="procesos_menu" action="cotizador_action"/>
 
 </odoo>
