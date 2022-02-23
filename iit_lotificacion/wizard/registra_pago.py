@@ -163,12 +163,38 @@ class RegistraPagoWizard(models.TransientModel):
                 }
 
                 pago_enganche = self.env['account.payment'].create(vals_pago)
+                pago_enganche.action_post()
 
-                vals_cargo_pago = {
-                    'payment_id': pago_enganche.id
+                vals_fr = {
+
                 }
 
-                cargo_enganche.write(vals_cargo_pago)
+                full_reconcile = self.env['account.full.reconcile'].create(vals_fr)
 
-                pago_enganche.action_post()
+                for line in cargo_enganche.line_ids:
+                    if line.debit > 0:
+                       for linec in pago_enganche.line_ids:
+                           if linec.credit > 0:
+                            vals_pr = {
+                                "debit_move_id" : line.id,
+                                "credit_move_id" : linec.id,
+                                "full_reconcile_id" : full_reconcile.id,
+                                "debit_currency_id" : cargo_enganche.currency_id.id,
+                                "credit_currency_id" : pago_enganche.currency_id.id,
+                                "amount": line.debit,
+                                "debit_amount_currency": line.debit,
+                                "credit_amount_currency": linec.credit
+                            }
+
+                            self.env['account.partial.reconcile'].create(vals_pr)
+
+                            vals_cargo_pago = {
+                                'payment_id': pago_enganche.id,
+                                'amount_residual': 0,
+                                'amount_residual_signed': 0,
+                                'payment_state': 'paid'
+
+                            }
+
+                            cargo_enganche.write(vals_cargo_pago)
 

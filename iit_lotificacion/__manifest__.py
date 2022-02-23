@@ -23,6 +23,7 @@
         'views/sequences.xml',
         'wizard/registra_pago.xml',
         'report/report.xml',
-        'report/cotizacion_template.xml'
+        'report/cotizacion_template.xml',
+        'report/estado_cuenta_template.xml'
     ]
 }
