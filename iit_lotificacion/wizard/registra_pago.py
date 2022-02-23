@@ -8,7 +8,7 @@ class RegistraPagoWizard(models.TransientModel):
     _description = 'Registra Pago wizard'
 
     tipo_pago = fields.Selection([('0', 'Cuotas'), ('1', 'Enganche')],string='Tipo de Pago', default='0')
-    boleta_id = fields.Many2one(string="Boleta de Pago", comodel_name='lot.boleta')
+    boleta = fields.Char(string='Boleta')
     monto = fields.Float(string="Monto", default=0)
     fecha = fields.Date(string="Fecha", default=datetime.today())
     journal_id = fields.Many2one(string="Diario", comodel_name='account.journal')
@@ -34,6 +34,36 @@ class RegistraPagoWizard(models.TransientModel):
             self.mora = 0
 
         self.cotizador_id = cotizador_id
+
+
+    def paga_cargo(self, cargo, abono, full_reconcile):
+        for line in cargo.line_ids:
+            if line.debit > 0:
+                for linec in abono.line_ids:
+                    if linec.credit > 0:
+                        vals_pr = {
+                            "debit_move_id": line.id,
+                            "credit_move_id": linec.id,
+                            "full_reconcile_id": full_reconcile.id,
+                            "debit_currency_id": cargo.currency_id.id,
+                            "credit_currency_id": abono.currency_id.id,
+                            "amount": line.debit,
+                            "debit_amount_currency": line.debit,
+                            "credit_amount_currency": linec.credit
+                        }
+
+                        self.env['account.partial.reconcile'].create(vals_pr)
+
+                        vals_cargo_pago = {
+                            'payment_id': abono.id,
+                            'amount_residual': 0,
+                            'amount_residual_signed': 0,
+                            'payment_state': 'paid'
+
+                        }
+
+                        cargo.write(vals_cargo_pago)
+        return self
 
     def action_pagar(self):
         cotizador_id = self.env['lot.cotizador'].search([('id','=',self.env.context['active_id'])])
@@ -89,7 +119,7 @@ class RegistraPagoWizard(models.TransientModel):
                         'valor_pagado': round(self.monto, 2),
                         'cotizador_id': cotizador_id.id,
                         'fecha_pago': self.fecha,
-                        'boleta_id': self.boleta_id.id,
+                        'boleta': self.boleta,
                         'cargo_capital_id': cargo_capital.id,
                         'cargo_intereses_id': cargo_intereses.id
                     }
@@ -111,16 +141,34 @@ class RegistraPagoWizard(models.TransientModel):
 
                         cargo_mora.action_post()
 
-                        vals_cuota = {
-                            'valor_pagado': round(self.monto, 2),
-                            'cotizador_id': cotizador_id.id,
-                            'fecha_pago': self.fecha,
-                            'boleta_id': self.boleta_id.id,
-                            'cargo_capital_id': cargo_capital.id,
-                            'cargo_intereses_id': cargo_intereses.id,
-                            'cargo_mora_id': cargo_mora.id
-                            }
+                        vals_cuota['cargo_mora_id'] = cargo_mora.id
 
+
+                    vals_pago = {
+                        'payment_type': 'inbound',
+                        'partner_type': 'customer',
+                        'state': 'draft',
+                        'partner_id': cotizador_id.cliente_id.id,
+                        'amount': round(self.monto + self.mora, 2),
+                        'journal_id': self.journal_id.id,
+                        'date': self.fecha,
+                        'ref': self.cotizador_id.name
+                    }
+
+                    pago_cuota = self.env['account.payment'].create(vals_pago)
+                    pago_cuota.action_post()
+
+                    vals_fr = {
+                    }
+
+                    full_reconcile = self.env['account.full.reconcile'].create(vals_fr)
+
+                    self.paga_cargo(cargo_capital, pago_cuota, full_reconcile)
+                    self.paga_cargo(cargo_intereses, pago_cuota, full_reconcile)
+                    if self.mora:
+                        self.paga_cargo(cargo_mora, pago_cuota, full_reconcile)
+
+                    vals_cuota['recibo_id'] = pago_cuota.id
                     self.cuota_id.write(vals_cuota)
 
 
@@ -141,16 +189,6 @@ class RegistraPagoWizard(models.TransientModel):
                 cargo_enganche = self.env['account.move'].create(vals_cargo_enganche)
                 cargo_enganche.action_post()
 
-                vals_enganche = {
-                        'valor_pagado': round(self.monto, 2),
-                        'cotizador_id': cotizador_id.id,
-                        'fecha': self.fecha,
-                        'boleta_id': self.boleta_id.id,
-                        'cargo_enganche_id': cargo_enganche.id
-                        }
-                cotizador_id.cotizador_enganche_lines.create(vals_enganche)
-
-
                 vals_pago = {
                     'payment_type': 'inbound',
                     'partner_type': 'customer',
@@ -163,12 +201,24 @@ class RegistraPagoWizard(models.TransientModel):
                 }
 
                 pago_enganche = self.env['account.payment'].create(vals_pago)
+                pago_enganche.action_post()
 
-                vals_cargo_pago = {
-                    'payment_id': pago_enganche.id
+                vals_fr = {
+
                 }
 
-                cargo_enganche.write(vals_cargo_pago)
+                full_reconcile = self.env['account.full.reconcile'].create(vals_fr)
 
-                pago_enganche.action_post()
+                self.paga_cargo(cargo_enganche, pago_enganche, full_reconcile)
+
+                vals_enganche = {
+                        'valor_pagado': round(self.monto, 2),
+                        'cotizador_id': cotizador_id.id,
+                        'fecha': self.fecha,
+                        'boleta': self.boleta,
+                        'cargo_enganche_id': cargo_enganche.id,
+                        'recibo_id': pago_enganche.id
+                        }
+
+                cotizador_id.cotizador_enganche_lines.create(vals_enganche)
 
