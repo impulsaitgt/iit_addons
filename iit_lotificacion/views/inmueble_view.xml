@@ -8,6 +8,8 @@
         <field name="arch" type="xml">
                 <form string="Inmueble">
                     <sheet>
+                        <field name="foto" placeholder="Foto" widget="image" class="oe_avatar"/>
+
                         <group>
                             <group>
                                 <h1>
@@ -17,12 +19,19 @@
                         </group>
                         <group>
                             <group>
+                                <field name="frente" placeholder="Frente"/>
+                                <field name="lateral_izquierdo" placeholder="Lateral Izquierdo"/>
+                                <field name="fondo" placeholder="Fondo"/>
+                                <field name="lateral_derecho" placeholder="Lateral Derecho"/>
+                                <field name="area" placeholder="Area"/>
                                 <field name="direccion" placeholder="Direccion"/>
+                            </group>
+                            <group>
                                 <field name="numero_de_escritura" placeholder="Numero de escritura"/>
                                 <field name="precio_a_publico" placeholder="Precio a publico"/>
+                                <field name="precio_iva" placeholder="Precio con IVA"/>
                                 <field name="precio_minimo" placeholder="Precio minimo"/>
                                 <field name="reserva" placeholder="Reserva"/>
-                                <field name="foto" placeholder="Foto"/>
                             </group>
                         </group>
                     </sheet>
@@ -36,12 +45,16 @@
             <field name="arch" type="xml">
                     <tree string="Inmuebles">
                         <field name="name"/>
+                        <field name="frente"/>
+                        <field name="lateral_izquierdo"/>
+                        <field name="fondo"/>
+                        <field name="lateral_derecho"/>
+                        <field name="area"/>
                         <field name="direccion"/>
                         <field name="numero_de_escritura"/>
                         <field name="precio_a_publico"/>
                         <field name="precio_minimo"/>
                         <field name="reserva"/>
-                        <field name="foto"/>
                     </tree>
             </field>
     </record>
