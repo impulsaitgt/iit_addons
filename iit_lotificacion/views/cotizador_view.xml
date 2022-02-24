@@ -114,7 +114,7 @@
                                 <field name="monto_financiar" ></field>
                                 <field name="suma_cuotas" ></field>
                             </group>
-                            <group string="montos pagados">
+                            <group string="Montos pagados">
                                 <field name="enganche_pagado" ></field>
                                 <field name="valor_pagado" ></field>
                             </group>
