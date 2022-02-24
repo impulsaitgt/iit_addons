@@ -17,12 +17,12 @@
                                 <h4>Fecha de Generacion: <span t-field="cotizacion.fecha_generacion" t-options='{"widget": "date" }'/></h4>
                             </div>
                         </div>
+                        <br/>
+                        <h4>Pagos Enganche</h4>
+                        <br/>
                         <div class="row">
-                            <div>
-                                <h4>Pagos de Enganche</h4>
-                            </div>
                             <div class="col-6" id="hash_data_consistency_table">
-                                <table class="table table-bordered" style="table-layout: fixed; height:150mm">
+                                <table class="table table-bordered" style="table-layout: fixed; ">
                                     <thead style="display: table-header-group">
                                         <tr>
                                             <th class="text-center" style="width: 33%" scope="col">Fecha</th>
@@ -46,12 +46,8 @@
                                     </tbody>
                                     <tfoot style="display: table-row-group">
                                         <tr>
-                                            <td class="text-center">
-                                            </td>
                                             <td>
                                                 Totales
-                                            </td>
-                                            <td>
                                             </td>
                                             <td class="text-right">
                                                 <span t-field="cotizacion.enganche_pagado" t-options='{"widget": "float" , "precision" : 2}'/>
@@ -61,10 +57,10 @@
                                 </table>
                             </div>
                         </div>
+                        <br/>
+                        <h4>Financiamiento</h4>
+                        <br/>
                         <div class="row">
-                            <div>
-                                <h4>Financiamiento</h4>
-                            </div>
                             <div class="col-12" id="hash_data_consistency_table">
                                 <table class="table table-bordered" style="table-layout: fixed; height:150mm">
                                     <thead style="display: table-header-group">
