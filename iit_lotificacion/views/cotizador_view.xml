@@ -2,27 +2,27 @@
 
 <odoo>
 
-    <record id="action_imprime_cotizacion" model="ir.actions.server">
-        <field name="name">Imprime Cotizacion</field>
-        <field name="type">ir.actions.server</field>
-        <field name="model_id" ref="model_lot_cotizador"/>
-        <field name="binding_model_id" ref="model_lot_cotizador"/>
-        <field name="state">code</field>
-        <field name="code">
-            action = record.action_imprime_cotizacion()
-        </field>
-    </record>
+<!--    <record id="action_imprime_cotizacion" model="ir.actions.server">-->
+<!--        <field name="name">Imprime Cotizacion</field>-->
+<!--        <field name="type">ir.actions.server</field>-->
+<!--        <field name="model_id" ref="model_lot_cotizador"/>-->
+<!--        <field name="binding_model_id" ref="model_lot_cotizador"/>-->
+<!--        <field name="state">code</field>-->
+<!--        <field name="code">-->
+<!--            action = record.action_imprime_cotizacion()-->
+<!--        </field>-->
+<!--    </record>-->
 
-    <record id="action_imprime_estado_cuenta" model="ir.actions.server">
-        <field name="name">Imprime Estado de Cuenta</field>
-        <field name="type">ir.actions.server</field>
-        <field name="model_id" ref="model_lot_cotizador"/>
-        <field name="binding_model_id" ref="model_lot_cotizador"/>
-        <field name="state">code</field>
-        <field name="code">
-            action = record.action_imprime_estado_cuenta()
-        </field>
-    </record>
+<!--    <record id="action_imprime_estado_cuenta" model="ir.actions.server">-->
+<!--        <field name="name">Imprime Estado de Cuenta</field>-->
+<!--        <field name="type">ir.actions.server</field>-->
+<!--        <field name="model_id" ref="model_lot_cotizador"/>-->
+<!--        <field name="binding_model_id" ref="model_lot_cotizador"/>-->
+<!--        <field name="state">code</field>-->
+<!--        <field name="code">-->
+<!--            action = record.action_imprime_estado_cuenta()-->
+<!--        </field>-->
+<!--    </record>-->
 
     <record id="cotizador_form_view" model="ir.ui.view">
         <field name="name">cotizador.form.view</field>
@@ -30,6 +30,7 @@
         <field name="arch" type="xml">
             <form string="Cotizador">
                 <header>
+                    <field name="valor_pagado" attrs="{'invisible': True}"/>
                     <field name="state" widget='statusbar' statusbar_visible="draft,published"/>
                     <button name="action_genera_cuotas" type="object" string="Generar Cuotas" class="oe_highlight"
                             confirm="Esto eliminara cuotas actuales, esta seguro?"
@@ -37,8 +38,9 @@
                     <button name="action_confirma_cuotas" type="object" string="Confirma Plan" class="oe_highlight"
                             attrs="{'invisible': ['|',['state', '=', 'published'],['state', '=', 'cancelled']]}"/>
                     <button name="action_reestablece_borrador" type="object" string="Restablecer a borrador"
-                            attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                            attrs="{'invisible': ['|',('state', '=', 'draft'), ('valor_pagado', '>', 'draft')]}"/>
                     <button name="action_cancela" type="object" string="Cancela"
+                            confirm="Esta operacion cancelara todas los documentos relacionados y es irreversible, esta seguro?"
                             attrs="{'invisible': ['|',('state', '=', 'published'),('state', '=', 'cancelled')]}"/>
                     <button name="action_registrar_pago" type="object" string="Registrar Pago" class="oe_highlight"
                             attrs="{'invisible': ['|',('state', '=', 'draft'),('state', '=', 'cancelled')]}"/>
@@ -149,4 +151,43 @@
             </tree>
         </field>
     </record>
+
+    <record id="cotizador_lines_tree_view" model="ir.ui.view">
+        <field name="name">cotizador.lines.tree.view</field>
+        <field name="model">lot.cotizador.lines</field>
+        <field name="arch" type="xml">
+            <tree string="Cotizador Lines">
+                <field name="cotizador_id"></field>
+                <field name="fecha"></field>
+                <field name="fecha_pago"></field>
+                <field name="capital"></field>
+                <field name="intereses"></field>
+                <field name="cuota"></field>
+                <field name="cuota_total"></field>
+                <field name="valor_pagado"></field>
+                <field name="boleta"></field>
+                <field name="cargo_capital_id"></field>
+                <field name="cargo_intereses_id"></field>
+                <field name="cargo_mora_id"></field>
+                <field name="recibo_id"></field>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="cotizador_enganche_lines_tree_view" model="ir.ui.view">
+        <field name="name">cotizador.enganche.lines.tree.view</field>
+        <field name="model">lot.cotizador.enganche.lines</field>
+        <field name="arch" type="xml">
+            <tree string="Cotizador Pagos Enganche">
+                <field name="cotizador_id"></field>
+                <field name="fecha"></field>
+                <field name="valor_pagado"></field>
+                <field name="boleta"></field>
+                <field name="cargo_enganche_id"></field>
+                <field name="recibo_id"></field>
+            </tree>
+        </field>
+    </record>
+
 </odoo>

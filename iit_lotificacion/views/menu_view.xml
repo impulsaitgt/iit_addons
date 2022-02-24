@@ -20,6 +20,18 @@
         <field name="view_mode">tree,form,kanban</field>
     </record>
 
+     <record id="pivote_cuotas_action" model="ir.actions.act_window">
+        <field name="name">Pivote_cuotas</field>
+        <field name="res_model">lot.cotizador.lines</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+     <record id="pivote_pagos_enganche_action" model="ir.actions.act_window">
+        <field name="name">Pivote_pagos_enganche</field>
+        <field name="res_model">lot.cotizador.enganche.lines</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
     <menuitem name="Lotificacion" id="lotificacion_menu"/>
     <menuitem name="Inmuebles" id="inmueble_menu" parent="lotificacion_menu"/>
     <menuitem name="Inmuebles" id="inmueble_opcion" parent="inmueble_menu" action="inmueble_action"/>
@@ -30,5 +42,8 @@
     <menuitem name="Procesos" id="procesos_menu" parent="lotificacion_menu"/>
     <menuitem name="Mora" id="mora_opcion" parent="procesos_menu" action="mora_action"/>
     <menuitem name="Cotizador" id="cotizador_opcion" parent="procesos_menu" action="cotizador_action"/>
+    <menuitem name="Informes" id="informes_menu" parent="lotificacion_menu"/>
+    <menuitem name="Pivote Cuotas" id="pivote_cuotas_opcion" parent="informes_menu" action="pivote_cuotas_action"/>
+    <menuitem name="Pivote Pagos Enganche" id="pivote_pagos_enganche_opcion" parent="informes_menu" action="pivote_pagos_enganche_action"/>
 
 </odoo>

@@ -1,5 +1,4 @@
 from odoo import models,fields,api
-from odoo.exceptions import ValidationError
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, date
 import math
@@ -28,7 +27,7 @@ class Cotizador(models.Model):
     cuota_uno = fields.Float(string="Cuota 1", readonly=True, default=0)
     cuota_normal = fields.Float(string="Cuota Normal", readonly=True, default=0)
     enganche_pagado = fields.Float(string="Enganche Pagado", readonly=True, compute="_montof_")
-    valor_pagado = fields.Float(string="Valor Pagado", readonly=True, compute="_montof")
+    valor_pagado = fields.Float(string="Valor Pagado", readonly=True, compute="_montof_")
     cuota_final = fields.Float(string="Cuota Normal", readonly=True, default=0)
     state_payment = fields.Char(string="Estado de Pago", readonly=True)
 
@@ -123,6 +122,29 @@ class Cotizador(models.Model):
         self.state="draft"
 
     def action_cancela(self):
+        for linea in self.cotizador_lines:
+            if linea.recibo_id:
+                linea.recibo_id.action_draft()
+                linea.recibo_id.action_cancel()
+            if linea.cargo_capital_id:
+                linea.cargo_capital_id.button_draft()
+                linea.cargo_capital_id.button_cancel()
+            if linea.cargo_intereses_id:
+                linea.cargo_intereses_id.button_draft()
+                linea.cargo_intereses_id.button_cancel()
+            if linea.cargo_mora_id:
+                linea.cargo_mora_id.button_draft()
+                linea.cargo_mora_id.button_cancel()
+
+        for linea_enganche in self.cotizador_enganche_lines:
+            if linea_enganche.recibo_id:
+                linea_enganche.recibo_id.action_draft()
+                linea_enganche.recibo_id.action_cancel()
+            if linea_enganche.cargo_enganche_id:
+                linea_enganche.cargo_enganche_id.button_draft()
+                linea_enganche.cargo_enganche_id.button_cancel()
+
+
         self.state="cancelled"
 
     def action_registrar_pago(self):
@@ -130,11 +152,11 @@ class Cotizador(models.Model):
         action['domain'] = [('lot.registra.pago.wizard.cotizador_id', '=', self.id)]
         return action
 
-    def action_imprime_cotizacion(self):
-        print("aqui imprimo cotizacion: ", self)
-
-    def action_imprime_estado_cuenta(self):
-        print("aqui imprimo estado de cuenta: ", self)
+    # def action_imprime_cotizacion(self):
+    #     print("aqui imprimo cotizacion: ", self)
+    #
+    # def action_imprime_estado_cuenta(self):
+    #     print("aqui imprimo estado de cuenta: ", self)
 
     def _montof_(self):
         for cotizador in self:
