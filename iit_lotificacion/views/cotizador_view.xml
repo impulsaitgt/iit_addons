@@ -38,7 +38,7 @@
                     <button name="action_confirma_cuotas" type="object" string="Confirma Plan" class="oe_highlight"
                             attrs="{'invisible': ['|',['state', '=', 'published'],['state', '=', 'cancelled']]}"/>
                     <button name="action_reestablece_borrador" type="object" string="Restablecer a borrador"
-                            attrs="{'invisible': ['|',('state', '=', 'draft'), ('valor_pagado', '>', 'draft')]}"/>
+                            attrs="{'invisible': ['|',('state', '=', 'draft'), ('valor_pagado', '>', 0)]}"/>
                     <button name="action_cancela" type="object" string="Cancela"
                             confirm="Esta operacion cancelara todas los documentos relacionados y es irreversible, esta seguro?"
                             attrs="{'invisible': ['|',('state', '=', 'published'),('state', '=', 'cancelled')]}"/>
