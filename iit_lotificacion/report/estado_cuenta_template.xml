@@ -65,14 +65,14 @@
                                 <table class="table table-bordered" style="table-layout: fixed; height:150mm">
                                     <thead style="display: table-header-group">
                                         <tr>
-                                            <th class="text-center" style="width: 9%" scope="col" >Cuota</th>
+                                            <th class="text-center" style="width: 8%" scope="col" >Cuota</th>
                                             <th class="text-center" style="width: 13%" scope="col">Fecha</th>
                                             <th class="text-center" style="width: 13%" scope="col">Capital</th>
                                             <th class="text-center" style="width: 13%" scope="col">Intereses</th>
                                             <th class="text-center" style="width: 13%" scope="col">Cuota Total</th>
                                             <th class="text-center" style="width: 13%" scope="col">Valor Pagado</th>
-                                            <th class="text-center" style="width: 13%" scope="col">Fecha de Pago</th>
-                                            <th class="text-center" style="width: 13%" scope="col">Boleta</th>                                        </tr>
+                                            <th class="text-center" style="width: 16%" scope="col">Fecha de Pago</th>
+                                            <th class="text-center" style="width: 10%" scope="col">Boleta</th>                                        </tr>
                                     </thead>
                                     <tbody>
                                         <t t-foreach="cotizacion.cotizador_lines" t-as="linea">
@@ -94,13 +94,14 @@
                                                 </td>
                                                 <td class="text-right">
                                                     <span t-field="linea.valor_pagado" t-options='{"widget": "float" , "precision" : 2}'/>
-                                                </td>                                            </tr>
+                                                </td>
                                                 <td>
                                                     <span t-field="linea.fecha_pago"/>
                                                 </td>
                                                 <td>
                                                     <span t-field="linea.boleta"/>
                                                 </td>
+                                            </tr>
                                         </t>
                                     </tbody>
                                     <tfoot style="display: table-row-group">

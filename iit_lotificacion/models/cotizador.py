@@ -31,6 +31,9 @@ class Cotizador(models.Model):
     cuota_final = fields.Float(string="Cuota Normal", readonly=True, default=0)
     state_payment = fields.Char(string="Estado de Pago", readonly=True)
 
+    _sql_constraints = [
+        ('referencia_unica', 'unique(name)', "Ese cotizador ya existe revisa la secuencia")
+    ]
 
     @api.model
     def create(self, vals):
