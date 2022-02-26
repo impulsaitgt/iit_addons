@@ -8,7 +8,8 @@
     'category': 'General',
     'version' : '1.0.0',
     'depends': [
-        "account"
+        "account",
+        "report_xlsx"
     ],
     'data': [
         'security/lotificacion_security.xml',
