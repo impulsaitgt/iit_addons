@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+
+<odoo>
+    <record id="product_template_product_form_ihnerit" model="ir.ui.view">
+        <field name="name">product.template.inherited</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <field name="barcode" position="after">
+                <field name="cf_unixcaja"/>
+                <field name="cf_preslitros"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="res_partner_form_ihnerit" model="ir.ui.view">
+        <field name="name">res.partner.inherited</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="vat" position="after">
+                <field name="cf_nombre_sat"/>
+            </field>
+        </field>
+    </record>
+</odoo>

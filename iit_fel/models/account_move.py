@@ -29,8 +29,8 @@ class account_move(models.Model):
                 errores = data['descripcion_errores']
                 raise ValidationError(errores[0]['mensaje_error'])
 
-            ET.ElementTree(fel_Xml).write("/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/" + data['uuid'] + ".xml")
-            # ET.ElementTree(fel_Xml).write("/opt/odoo/fel/" + data['uuid'] + ".xml")
+            # ET.ElementTree(fel_Xml).write("/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/" + data['uuid'] + ".xml")
+            ET.ElementTree(fel_Xml).write("/opt/odoo/fel/" + data['uuid'] + ".xml",encoding="unicode")
 
             notacreada = self.env['account.move'].browse(res.id)
 
@@ -48,14 +48,17 @@ class account_move(models.Model):
 
             fel_Xml = confel.genxml(self,'FACT')
 
+            ET.ElementTree(fel_Xml).write("/opt/odoo/fel/pararevisar.xml",encoding="unicode")
+
+
             data = confel.firmafel(self,fel_Xml)
 
             if not data['resultado']:
                 errores = data['descripcion_errores']
                 raise ValidationError(errores[0]['mensaje_error'])
 
-            ET.ElementTree(fel_Xml).write("/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/" + data['uuid'] + ".xml",encoding="unicode")
-            # ET.ElementTree(fel_Xml).write("/opt/odoo/fel/" + data['uuid'] + ".xml")
+            # ET.ElementTree(fel_Xml).write("/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/" + data['uuid'] + ".xml")
+            ET.ElementTree(fel_Xml).write("/opt/odoo/fel/" + data['uuid'] + ".xml",encoding="unicode")
 
             self.fel_uuid = data['uuid']
             self.fel_serie = data['serie']
@@ -73,8 +76,8 @@ class account_move(models.Model):
                 errores = data['descripcion_errores']
                 raise ValidationError(errores[0]['mensaje_error'])
 
-            ET.ElementTree(fel_Xml).write("/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/" + data['uuid'] + ".xml")
-            # ET.ElementTree(fel_Xml).write("/opt/odoo/fel/" + data['uuid'] + ".xml")
+            # ET.ElementTree(fel_Xml).write("/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/" + data['uuid'] + ".xml")
+            ET.ElementTree(fel_Xml).write("/opt/odoo/fel/" + data['uuid'] + ".xml",encoding="unicode")
 
             self.fel_uuid = data['uuid']
             self.fel_serie = data['serie']
@@ -103,10 +106,8 @@ class account_move(models.Model):
 
         return res
 
-    # def button_draft(self):
-    #     res = super(account_move, self).button_draft()
-    #     if (self.fel_certificado):
-    #        raise ValidationError('Este documento esta firmado electronicamente con el numero '+self.fel_uuid+' no puede ser revertido')
-    #
-    #     return res
-
+    #def button_draft(self):
+    #   res = super(account_move, self).button_draft()
+    #    if (self.fel_certificado):
+    #       raise ValidationError('Este documento esta firmado electronicamente con el numero '+self.fel_uuid+' no puede ser revertido')
+    #        return res
