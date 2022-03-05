@@ -23,6 +23,10 @@ class Inmueble(models.Model):
         self.precio_iva = round(round(iva_id.amount / 100 * self.precio_a_publico, 2) + self.precio_a_publico, 2)
 
 
+    def action_view_cotizaciones(self):
+        action = self.env.ref('iit_lotificacion.cotizador_action').read()[0]
+        action['domain'] = [('inmueble_id','=',self.id)]
+        return action
 
 
 

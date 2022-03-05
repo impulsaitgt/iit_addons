@@ -3,8 +3,6 @@ import json, requests
 import base64
 import random
 from datetime import datetime
-import sys
-import io
 
 
 class controllerfel:
@@ -48,7 +46,7 @@ class controllerfel:
         dicReceptor = {
             'CorreoReceptor': "",
             'IDReceptor': self.partner_id.vat,
-            'NombreReceptor': self.partner_id.cf_nombre_sat
+            'NombreReceptor': self.partner_id.fel_nombre_sat
         }
 
         dicFrase1 = {
@@ -263,6 +261,8 @@ class controllerfel:
 
         url = "https://certificador.feel.com.gt/fel/procesounificado/transaccion/v2/xml"
 
+        #print(data[0][1][0].text)
+
         # headers = {
         #     'UsuarioFirma': "2459413K",
         #     'LlaveFirma': "8f898eb40aff0e4d060380004523b5ce",
@@ -271,17 +271,17 @@ class controllerfel:
         #     'Identificador': data[0][1][0].text,
         # }
 
-        headers = {
-            'UsuarioFirma': "CLEAN_FACTORY",
-            'LlaveFirma': "c719e190a6eedfb203fe697fd17f3f34",
-            'UsuarioApi': "CLEAN_FACTORY",
-            'LlaveApi': "46155CE198281D56C1F479082C6946C7",
-            'Identificador': data[0][1][0].text,
-        }
+        # Ultimo de Clean
+        # headers = {
+        #     'UsuarioFirma': "CLEAN_FACTORY",
+        #     'LlaveFirma': "c719e190a6eedfb203fe697fd17f3f34",
+        #     'UsuarioApi': "CLEAN_FACTORY",
+        #     'LlaveApi': "46155CE198281D56C1F479082C6946C7",
+        #     'Identificador': data[0][1][0].text,
+        # }
 
-        # response = requests.post(url, data=ET.tostring(data,encoding="unicode"), headers=headers)
 
-        response = {
+        response_pru = {
             "resultado": True,
             "descripcion_errores": "Generado para pruebas",
             "uuid": "GENERADO-PARA-PRUEBAS",
@@ -292,10 +292,19 @@ class controllerfel:
                     }]
         }
 
-        # return json.loads(response.text)
+        headers = {
+            'UsuarioFirma': self.env.company.fel_UsuarioFirma,
+            'LlaveFirma': self.env.company.fel_LlaveFirma,
+            'UsuarioApi': self.env.company.fel_UsuarioApi,
+            'LlaveApi': self.env.company.fel_LlaveApi,
+            'Identificador': data[0][1][0].text,
+        }
 
-        return response
-
+        if self.env.company.fel_service == "S":
+            response = requests.post(url, data=ET.tostring(data,encoding="unicode"), headers=headers)
+            return json.loads(response.text)
+        else:
+            return response_pru
 
     def genxmlanulacion(self):
         dicGTAnulacionDocumento = {
@@ -338,10 +347,10 @@ class controllerfel:
         url = "https://certificador.feel.com.gt/fel/procesounificado/transaccion/v2/xml"
 
         headers = {
-            'UsuarioFirma': "CLEAN_FACTORY",
-            'LlaveFirma': "c719e190a6eedfb203fe697fd17f3f34",
-            'UsuarioApi': "CLEAN_FACTORY",
-            'LlaveApi': "46155CE198281D56C1F479082C6946C7",
+            'UsuarioFirma': self.env.company.fel_UsuarioFirma,
+            'LlaveFirma': self.env.company.fel_LlaveFirma,
+            'UsuarioApi': self.env.company.fel_UsuarioApi,
+            'LlaveApi': self.env.company.fel_LlaveApi,
             'Identificador': self.name,
         }
 

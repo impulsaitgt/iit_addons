@@ -31,7 +31,7 @@ class CotizadorXlsx(models.AbstractModel):
             company = self.env['res.company'].search([('id','=', obj.env.company.id)])
             if company.logo:
                 logo_image = io.BytesIO(base64.b64decode(company.logo))
-                sheet.insert_image(row, col, "image.png", {'image_data': logo_image, 'x_scale': 0.75, 'y_scale': 0.50})
+                sheet.insert_image(row, col, "image.png", {'image_data': logo_image, 'x_scale': 0.50, 'y_scale': 0.50})
 
             row += 5
 
