@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <record id="report_contrato" model="ir.actions.report">
+        <field name="name">Contrato</field>
+        <field name="model">aca.contrato</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">iit_academia.report_contrato</field>
+        <field name="report_file">iit_academia.report_contrato</field>
+        <field name="binding_model_id" ref="model_aca_contrato"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="report_torneos" model="ir.actions.report">
+        <field name="name">Torneo</field>
+        <field name="model">aca.torneo</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">iit_academia.report_torneo</field>
+        <field name="report_file">iit_academia.report_torneo</field>
+        <field name="binding_model_id" ref="model_aca_torneo"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

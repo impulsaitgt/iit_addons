@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template id="report_contrato">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="contrato">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="row" id="hash_header">
+                            <div class="col-12">
+                                <h4>Contrato:
+                                    <span t-field="contrato.name"/>
+                                </h4>
+                                <h4>Estudiante:
+                                    <span t-field="contrato.estudiante_id"/>
+                                </h4>
+                                <h4>Fecha Inicial:
+                                    <span t-field="contrato.fecha_inicial"/>
+                                </h4>
+                                <h4>Fecha Final:
+                                    <span t-field="contrato.fecha_final"/>
+                                </h4>
+                                <h4>Responsable:
+                                    <span t-field="contrato.responsable_id"/>
+                                </h4>
+                                <h4>Inscripcion:
+                                    <span t-field="contrato.inscripcion"
+                                          t-options='{"widget": "float" , "precision" : 2}'/>
+                                </h4>
+                                <h4>Mensualidad:
+                                    <span t-field="contrato.mensualidad"
+                                          t-options='{"widget": "float" , "precision" : 2}'/>
+                                </h4>
+                                <h4>Observaciones:
+                                    <span t-field="contrato.observaciones"/>
+                                </h4>
+                                <h4>ID:
+                                    <span t-field="contrato.estudiante_id"/>
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12" id="hash_data_consistency_table">
+                                <table class="table table-bordered" style="table-layout: fixed; height:150mm">
+                                    <thead style="display: table-header-group">
+                                        <tr>
+                                            <th class="text-center" style="width: 33%" scope="col">Producto</th>
+                                            <th class="text-center" style="width: 33%" scope="col">Cantidad</th>
+                                            <th class="text-center" style="width: 33%" scope="col">Precio</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="contrato.contratos_lines" t-as="linea">
+                                            <tr>
+                                                <td class="text-center">
+                                                    <span t-field="linea.producto_id"/>
+                                                </td>
+                                                <td>
+                                                    <span t-field="linea.cantidad"/>
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-field="linea.precio" t-options='{"widget": "float" , "precision" : 2}'/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

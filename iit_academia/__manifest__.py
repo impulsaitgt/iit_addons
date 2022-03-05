@@ -8,7 +8,8 @@
     'category': 'General',
     'version' : '1.0.0',
     'depends': [
-        "account"
+        "account",
+        "mail"
     ],
     'data': [
         'security/academia_security.xml',
@@ -21,6 +22,9 @@
         'views/account_journal_view.xml',
         'views/account_move_view.xml',
         'views/product_template_view.xml',
-        'views/sequences.xml'
+        'views/sequences.xml',
+        'report/report.xml',
+        'report/contrato_template.xml',
+        'report/torneo_template.xml'
     ]
 }
