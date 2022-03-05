@@ -11,6 +11,7 @@
                     <field name="fel_uuid"/>
                     <field name="fel_serie"/>
                     <field name="fel_numero"/>
+                    <field name="fel_estado"/>
                 </group>
             </group>
         </field>

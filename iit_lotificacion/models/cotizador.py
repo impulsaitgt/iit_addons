@@ -200,6 +200,8 @@ class CotizadorLines(models.Model):
     _name = 'lot.cotizador.lines'
 
     cotizador_id = fields.Many2one(comodel_name='lot.cotizador')
+    inmueble_name = fields.Char(string="Inmueble", related="cotizador_id.inmueble_id.name")
+
     fecha = fields.Date(string="Fecha", required=True)
     fecha_pago = fields.Date(string="Fecha Pagado")
     capital = fields.Float(string="Capital", default=0)

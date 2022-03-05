@@ -8,6 +8,14 @@
         <field name="arch" type="xml">
                 <form string="Inmueble">
                     <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object" name="action_view_cotizaciones" icon="fa-book">
+                                Cotizaciones
+                            </button>
+                            <button class="oe_stat_button" type="object" name="action_view_cotizaciones" icon="fa-pencil-square">
+                                Cargos
+                            </button>
+                        </div>
                         <field name="foto" placeholder="Foto" widget="image" class="oe_avatar"/>
 
                         <group>
