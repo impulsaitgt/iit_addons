@@ -2,6 +2,7 @@ from odoo import models,fields,api
 
 class Estudiante(models.Model):
     _name = 'aca.estudiante'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     name = fields.Char(string='Nombre Completo', required=True)
     codigo = fields.Char(string='Codigo', copy='False', default='Nuevo', readonly=True)
@@ -10,12 +11,12 @@ class Estudiante(models.Model):
     cui = fields.Char(string='CUI', required=True)
     status_contratos = fields.Char(string='Status Contratos',compute="_contratos_",default='Nuevo')
     status_torneos = fields.Char(string='Status Torneos',compute="_torneos_",default='Nuevo')
-    estatura = fields.Float(string="Estatura en metros", required=True)
-    talla = fields.Selection([ ('8','8'),('10','10'),('12','12'),('14','14'),('S','Small'),('M','Medium'),('L2','Large'),('XL','Extra Large')],string="Talla de Uniforme", default='8',required=True)
-    peso = fields.Float(string="Peso en libras", required=True)
+    estatura = fields.Float(string="Estatura en metros", required=True, tracking=True)
+    talla = fields.Selection([ ('8','8'),('10','10'),('12','12'),('14','14'),('S','Small'),('M','Medium'),('L2','Large'),('XL','Extra Large')],string="Talla de Uniforme", default='8', required=True, tracking=True)
+    peso = fields.Float(string="Peso en libras", required=True, tracking=True)
     anio_nacimiento = fields.Integer(string="Año de nacimiento", compute="_calcula_anio_", readonly=True)
     responsable_id = fields.Many2one(comodel_name='res.partner')
-
+    foto = fields.Binary(string="Foto")
 
     _sql_constraints = [
         ('codigo_unico', 'unique(codigo)', "Ese codigo ya existe revisa la secuencia")

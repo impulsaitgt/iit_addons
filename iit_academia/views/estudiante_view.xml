@@ -21,6 +21,7 @@
                             Cargos
                         </button>
                     </div>
+                    <field name="foto" placeholder="Foto" widget="image" class="oe_avatar"/>
                     <group>
                         <group>
                             <h1>
@@ -41,16 +42,26 @@
                             <field name="responsable_id" placeholder="Responsable"/>
                             <field name="anio_nacimiento" placeholder="Año Nacimiento"/>
                             <field name="codigo"/>
-                            <field name="status_contratos" widget="badge" decoration-danger="status_contratos == 'Inactivo'" decoration-success="status_contratos == 'Activo'" decoration-muted="status_contratos == 'Nuevo'"/>
-                            <field name="status_torneos" widget="badge" decoration-danger="status_torneos == 'Inactivo'" decoration-success="status_torneos == 'Activo'" decoration-muted="status_torneos == 'Nuevo'"/>
+                            <field name="status_contratos" widget="badge"
+                                   decoration-danger="status_contratos == 'Inactivo'"
+                                   decoration-success="status_contratos == 'Activo'"
+                                   decoration-muted="status_contratos == 'Nuevo'"/>
+                            <field name="status_torneos" widget="badge" decoration-danger="status_torneos == 'Inactivo'"
+                                   decoration-success="status_torneos == 'Activo'"
+                                   decoration-muted="status_torneos == 'Nuevo'"/>
                         </group>
                     </group>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
     </record>
 
-        <!-- vista Arbol (Tree) estudiantes -->
+    <!-- vista Arbol (Tree) estudiantes -->
     <record id="estudiante_tree_view" model="ir.ui.view">
         <field name="name">estudiante.tree.view</field>
         <field name="model">aca.estudiante</field>
@@ -65,8 +76,11 @@
                 <field name="talla"/>
                 <field name="estatura"/>
                 <field name="responsable_id"/>
-                <field name="status_contratos" widget="badge" decoration-danger="status_contratos == 'Inactivo'" decoration-success="status_contratos == 'Activo'" decoration-muted="status_contratos == 'Nuevo'"/>
-                <field name="status_torneos" widget="badge" decoration-danger="status_torneos == 'Inactivo'" decoration-success="status_torneos == 'Activo'" decoration-muted="status_torneos == 'Nuevo'"/>
+                <field name="status_contratos" widget="badge" decoration-danger="status_contratos == 'Inactivo'"
+                       decoration-success="status_contratos == 'Activo'"
+                       decoration-muted="status_contratos == 'Nuevo'"/>
+                <field name="status_torneos" widget="badge" decoration-danger="status_torneos == 'Inactivo'"
+                       decoration-success="status_torneos == 'Activo'" decoration-muted="status_torneos == 'Nuevo'"/>
             </tree>
         </field>
     </record>
