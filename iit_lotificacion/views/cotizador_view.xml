@@ -158,6 +158,7 @@
         <field name="arch" type="xml">
             <tree string="Cotizador Lines">
                 <field name="cotizador_id"></field>
+                <field name="inmueble_name"></field>
                 <field name="fecha"></field>
                 <field name="fecha_pago"></field>
                 <field name="capital"></field>

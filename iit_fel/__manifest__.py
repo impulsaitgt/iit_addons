@@ -12,6 +12,8 @@
         "account_debit_note"
     ],
     'data': [
-        "views/fel.xml"
+        "views/account_move.xml",
+        "views/res_partner.xml",
+        "views/res_company.xml"
     ]
 }
